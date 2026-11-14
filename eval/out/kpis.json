@@ -1,0 +1,143 @@
+[
+  {
+    "id": "queue_size",
+    "label": "Reviewer queue (seeded cases)",
+    "value": 16,
+    "unit": "cases",
+    "source": "eval/out/queue_seed.json (FR-62); simulated ages (eval/out/queue_seed.json)",
+    "note": "11 test-set cases routed to a person, 5 constructed cases. Constructed values are not evidence."
+  },
+  {
+    "id": "queue_oldest_age",
+    "label": "Oldest case in queue",
+    "value": 93,
+    "unit": "hours",
+    "source": "simulated ages (eval/out/queue_seed.json)",
+    "note": "Age is simulated and labelled as such in the seed; not a live queue."
+  },
+  {
+    "id": "ai_mix_approve",
+    "label": "AI decision: approve",
+    "value": 364,
+    "unit": "applications",
+    "source": "in-sample, 600 test applications (eval/out/eval_predictions.csv)",
+    "note": "Engine decision column (before the reviewer step)."
+  },
+  {
+    "id": "ai_mix_needs_more_info",
+    "label": "AI decision: needs more info",
+    "value": 176,
+    "unit": "applications",
+    "source": "in-sample, 600 test applications (eval/out/eval_predictions.csv)",
+    "note": "Engine decision column."
+  },
+  {
+    "id": "ai_mix_reject",
+    "label": "AI decision: reject",
+    "value": 49,
+    "unit": "applications",
+    "source": "in-sample, 600 test applications (eval/out/eval_predictions.csv)",
+    "note": "Engine decision column; excludes the routed cases."
+  },
+  {
+    "id": "ai_mix_routed",
+    "label": "AI decision: routed to a person",
+    "value": 11,
+    "unit": "applications",
+    "source": "in-sample, 600 test applications (eval/out/eval_predictions.csv)",
+    "note": "Engine decision HUMAN_REVIEW (rulebook s.9)."
+  },
+  {
+    "id": "share_routed_to_person",
+    "label": "Share routed to a person",
+    "value": 0.0183,
+    "unit": "share",
+    "source": "in-sample, 600 test applications (eval/out/eval_predictions.csv)",
+    "note": "11 of 600 applications."
+  },
+  {
+    "id": "overrides",
+    "label": "Reviewer overrides of the AI",
+    "value": null,
+    "unit": "share",
+    "source": "this browser session only; not measured offline",
+    "note": "Overrides exist only in the live page, per browser session. No figure is stored or claimed here."
+  },
+  {
+    "id": "drop_off_by_stage_today",
+    "label": "Drop-off by stage, today's process",
+    "value": [
+      {
+        "step": "2 Upload documents",
+        "entering": 3000,
+        "lost": 258,
+        "lost_pct": 8.6
+      },
+      {
+        "step": "3 Wait for a reviewer",
+        "entering": 2742,
+        "lost": 0,
+        "lost_pct": 0.0
+      },
+      {
+        "step": "4 First review",
+        "entering": 2742,
+        "lost": 314,
+        "lost_pct": 11.5
+      },
+      {
+        "step": "4a Applicant fixes returned documents",
+        "entering": 774,
+        "lost": 211,
+        "lost_pct": 27.3
+      },
+      {
+        "step": "4b Wait for re-check",
+        "entering": 582,
+        "lost": 0,
+        "lost_pct": 0.0
+      },
+      {
+        "step": "4c Re-check after fix",
+        "entering": 582,
+        "lost": 0,
+        "lost_pct": 0.0
+      },
+      {
+        "step": "5 Start training",
+        "entering": 2217,
+        "lost": 482,
+        "lost_pct": 21.7
+      },
+      {
+        "step": "6 Training (15 h)",
+        "entering": 1735,
+        "lost": 0,
+        "lost_pct": 0.0
+      },
+      {
+        "step": "7 Exam",
+        "entering": 1735,
+        "lost": 0,
+        "lost_pct": 0.0
+      },
+      {
+        "step": "8 Certificate",
+        "entering": 1735,
+        "lost": 0,
+        "lost_pct": 0.0
+      }
+    ],
+    "unit": "applications lost per stage",
+    "source": "data pack stage_events, today's process (stage1/tables/process_map_steps.csv)",
+    "note": "Entering and lost counts per step as recorded in the process map table."
+  },
+  {
+    "id": "reviewer_minutes_per_application",
+    "label": "Reviewer minutes per application",
+    "value": 0.38,
+    "unit": "minutes",
+    "source": "simulated estimate (eval/out/simulation.json)",
+    "note": "Routed share times today's mean of 20.7 reviewer minutes per application (simulation.json). A simulated estimate, not a measured reviewer time."
+  }
+]

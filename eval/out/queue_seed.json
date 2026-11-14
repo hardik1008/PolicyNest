@@ -1,0 +1,769 @@
+{
+  "generated_at": "2026-11-14T19:40:38+00:00",
+  "engine_sha256": "c5da9cfb54f8e716b9630a7075a9f25db04e47cc696061ee7136e98019bce367",
+  "note": "Seeded reviewer queue for the Review console (FR-62). 11 cases are test-set applications the engine routes to a person; 5 are constructed (fictional names, every value marked constructed). Ages are simulated and deterministic. The AI recommendation is the engine output; dataset truth labels are deliberately not included. Aadhaar and PAN numbers are omitted.",
+  "cases": [
+    {
+      "id": "APP-26016",
+      "kind": "test-set case",
+      "constructed": false,
+      "source": "test set (04_DATASETS); engine output eval/out/eval_predictions.csv",
+      "why_routed": "Different person's name (NAME_MISMATCH) - rulebook s.5 and s.9: the system may recommend, a person confirms",
+      "ai_recommendation": "REJECT",
+      "engine_decision": "HUMAN_REVIEW",
+      "codes": [
+        "DOB_MISMATCH",
+        "NAME_MISMATCH"
+      ],
+      "name_on_pan": "ANKIT MITTAL",
+      "names_on_other_documents": {
+        "AADHAAR_FRONT": "ANKIT MITTAL",
+        "AADHAAR_BACK": null,
+        "CLASS10_MARKSHEET": "SOUMYA DUTTA",
+        "CANCELLED_CHEQUE": "A MITTAL"
+      },
+      "face_match_score": 0.83,
+      "state_declared": "Punjab",
+      "documents": [
+        {
+          "document": "PAN",
+          "ocr_confidence": 0.927
+        },
+        {
+          "document": "AADHAAR_FRONT",
+          "ocr_confidence": 0.925
+        },
+        {
+          "document": "AADHAAR_BACK",
+          "ocr_confidence": 0.929
+        },
+        {
+          "document": "CLASS10_MARKSHEET",
+          "ocr_confidence": 0.952
+        },
+        {
+          "document": "CANCELLED_CHEQUE",
+          "ocr_confidence": 0.886
+        },
+        {
+          "document": "SELFIE",
+          "ocr_confidence": 0.915
+        }
+      ],
+      "where_unsure": [
+        {
+          "check": "DOB_MISMATCH",
+          "reason": "engine check not passed"
+        },
+        {
+          "check": "NAME_MISMATCH",
+          "reason": "engine check not passed"
+        }
+      ],
+      "age_hours": 10,
+      "age_label": "simulated"
+    },
+    {
+      "id": "APP-26115",
+      "kind": "test-set case",
+      "constructed": false,
+      "source": "test set (04_DATASETS); engine output eval/out/eval_predictions.csv",
+      "why_routed": "Different person's name (NAME_MISMATCH) - rulebook s.5 and s.9: the system may recommend, a person confirms",
+      "ai_recommendation": "REJECT",
+      "engine_decision": "HUMAN_REVIEW",
+      "codes": [
+        "NAME_MISMATCH",
+        "BANK_NAME_MISMATCH"
+      ],
+      "name_on_pan": "SIMRAN GILL",
+      "names_on_other_documents": {
+        "AADHAAR_FRONT": "SIMRAN GILL",
+        "AADHAAR_BACK": null,
+        "CLASS10_MARKSHEET": "SEEMA RAWAT",
+        "CANCELLED_CHEQUE": "KAVITA RANI TIWARI"
+      },
+      "face_match_score": 0.85,
+      "state_declared": "Madhya Pradesh",
+      "documents": [
+        {
+          "document": "PAN",
+          "ocr_confidence": 0.954
+        },
+        {
+          "document": "AADHAAR_FRONT",
+          "ocr_confidence": 0.949
+        },
+        {
+          "document": "AADHAAR_BACK",
+          "ocr_confidence": 0.905
+        },
+        {
+          "document": "CLASS10_MARKSHEET",
+          "ocr_confidence": 0.924
+        },
+        {
+          "document": "CANCELLED_CHEQUE",
+          "ocr_confidence": 0.968
+        },
+        {
+          "document": "SELFIE",
+          "ocr_confidence": 0.95
+        }
+      ],
+      "where_unsure": [
+        {
+          "check": "NAME_MISMATCH",
+          "reason": "engine check not passed"
+        },
+        {
+          "check": "BANK_NAME_MISMATCH",
+          "reason": "engine check not passed"
+        }
+      ],
+      "age_hours": 33,
+      "age_label": "simulated"
+    },
+    {
+      "id": "APP-26280",
+      "kind": "test-set case",
+      "constructed": false,
+      "source": "test set (04_DATASETS); engine output eval/out/eval_predictions.csv",
+      "why_routed": "Different person's name (NAME_MISMATCH) - rulebook s.5 and s.9: the system may recommend, a person confirms",
+      "ai_recommendation": "REJECT",
+      "engine_decision": "HUMAN_REVIEW",
+      "codes": [
+        "NAME_MISMATCH"
+      ],
+      "name_on_pan": "RAJIB MISHRA",
+      "names_on_other_documents": {
+        "AADHAAR_FRONT": "RAJIB MISHRA",
+        "AADHAAR_BACK": null,
+        "CLASS10_MARKSHEET": "HARDIK SOLANKI",
+        "CANCELLED_CHEQUE": "R MISHRA"
+      },
+      "face_match_score": 0.88,
+      "state_declared": "Bihar",
+      "documents": [
+        {
+          "document": "PAN",
+          "ocr_confidence": 0.88
+        },
+        {
+          "document": "AADHAAR_FRONT",
+          "ocr_confidence": 0.93
+        },
+        {
+          "document": "AADHAAR_BACK",
+          "ocr_confidence": 0.965
+        },
+        {
+          "document": "CLASS10_MARKSHEET",
+          "ocr_confidence": 0.963
+        },
+        {
+          "document": "CANCELLED_CHEQUE",
+          "ocr_confidence": 0.96
+        },
+        {
+          "document": "SELFIE",
+          "ocr_confidence": 0.937
+        }
+      ],
+      "where_unsure": [
+        {
+          "check": "NAME_MISMATCH",
+          "reason": "engine check not passed"
+        }
+      ],
+      "age_hours": 8,
+      "age_label": "simulated"
+    },
+    {
+      "id": "APP-26363",
+      "kind": "test-set case",
+      "constructed": false,
+      "source": "test set (04_DATASETS); engine output eval/out/eval_predictions.csv",
+      "why_routed": "Different person's name (NAME_MISMATCH) - rulebook s.5 and s.9: the system may recommend, a person confirms",
+      "ai_recommendation": "REJECT",
+      "engine_decision": "HUMAN_REVIEW",
+      "codes": [
+        "NAME_MISMATCH"
+      ],
+      "name_on_pan": "SAGAR PAWAR",
+      "names_on_other_documents": {
+        "AADHAAR_FRONT": "SAGAR PAWAR",
+        "AADHAAR_BACK": null,
+        "CLASS10_MARKSHEET": "SANJAY MISHRA",
+        "CANCELLED_CHEQUE": "S PAWAR"
+      },
+      "face_match_score": 0.85,
+      "state_declared": "Gujarat",
+      "documents": [
+        {
+          "document": "PAN",
+          "ocr_confidence": 0.914
+        },
+        {
+          "document": "AADHAAR_FRONT",
+          "ocr_confidence": 0.946
+        },
+        {
+          "document": "AADHAAR_BACK",
+          "ocr_confidence": 0.919
+        },
+        {
+          "document": "CLASS10_MARKSHEET",
+          "ocr_confidence": 0.889
+        },
+        {
+          "document": "CANCELLED_CHEQUE",
+          "ocr_confidence": 0.96
+        },
+        {
+          "document": "SELFIE",
+          "ocr_confidence": 0.936
+        }
+      ],
+      "where_unsure": [
+        {
+          "check": "NAME_MISMATCH",
+          "reason": "engine check not passed"
+        }
+      ],
+      "age_hours": 6,
+      "age_label": "simulated"
+    },
+    {
+      "id": "APP-26418",
+      "kind": "test-set case",
+      "constructed": false,
+      "source": "test set (04_DATASETS); engine output eval/out/eval_predictions.csv",
+      "why_routed": "Different person's name (NAME_MISMATCH) - rulebook s.5 and s.9: the system may recommend, a person confirms",
+      "ai_recommendation": "REJECT",
+      "engine_decision": "HUMAN_REVIEW",
+      "codes": [
+        "NAME_MISMATCH"
+      ],
+      "name_on_pan": "MOHIT LAL MALHOTRA",
+      "names_on_other_documents": {
+        "AADHAAR_FRONT": "MOHIT LAL MALHOTRA",
+        "AADHAAR_BACK": null,
+        "CLASS10_MARKSHEET": "RUPA DUTTA",
+        "CANCELLED_CHEQUE": "MOHIT LAL MALHOTRA"
+      },
+      "face_match_score": 0.87,
+      "state_declared": "Madhya Pradesh",
+      "documents": [
+        {
+          "document": "PAN",
+          "ocr_confidence": 0.94
+        },
+        {
+          "document": "AADHAAR_FRONT",
+          "ocr_confidence": 0.916
+        },
+        {
+          "document": "AADHAAR_BACK",
+          "ocr_confidence": 0.978
+        },
+        {
+          "document": "CLASS10_MARKSHEET",
+          "ocr_confidence": 0.917
+        },
+        {
+          "document": "CANCELLED_CHEQUE",
+          "ocr_confidence": 0.961
+        },
+        {
+          "document": "SELFIE",
+          "ocr_confidence": 0.981
+        }
+      ],
+      "where_unsure": [
+        {
+          "check": "NAME_MISMATCH",
+          "reason": "engine check not passed"
+        }
+      ],
+      "age_hours": 86,
+      "age_label": "simulated"
+    },
+    {
+      "id": "APP-26473",
+      "kind": "test-set case",
+      "constructed": false,
+      "source": "test set (04_DATASETS); engine output eval/out/eval_predictions.csv",
+      "why_routed": "Different person's name (NAME_MISMATCH) - rulebook s.5 and s.9: the system may recommend, a person confirms",
+      "ai_recommendation": "REJECT",
+      "engine_decision": "HUMAN_REVIEW",
+      "codes": [
+        "NAME_MISMATCH"
+      ],
+      "name_on_pan": "SAKSHI DUBEY",
+      "names_on_other_documents": {
+        "AADHAAR_FRONT": "SAKSHI DUBEY",
+        "AADHAAR_BACK": null,
+        "CLASS10_MARKSHEET": "SANGEETHA NAIDU",
+        "CANCELLED_CHEQUE": "SAKSHI DUBEY"
+      },
+      "face_match_score": 0.87,
+      "state_declared": "Punjab",
+      "documents": [
+        {
+          "document": "PAN",
+          "ocr_confidence": 0.925
+        },
+        {
+          "document": "AADHAAR_FRONT",
+          "ocr_confidence": 0.936
+        },
+        {
+          "document": "AADHAAR_BACK",
+          "ocr_confidence": 0.89
+        },
+        {
+          "document": "CLASS10_MARKSHEET",
+          "ocr_confidence": 0.962
+        },
+        {
+          "document": "CANCELLED_CHEQUE",
+          "ocr_confidence": 0.949
+        },
+        {
+          "document": "SELFIE",
+          "ocr_confidence": 0.929
+        }
+      ],
+      "where_unsure": [
+        {
+          "check": "NAME_MISMATCH",
+          "reason": "engine check not passed"
+        }
+      ],
+      "age_hours": 29,
+      "age_label": "simulated"
+    },
+    {
+      "id": "APP-26500",
+      "kind": "test-set case",
+      "constructed": false,
+      "source": "test set (04_DATASETS); engine output eval/out/eval_predictions.csv",
+      "why_routed": "Different person's name (NAME_MISMATCH) - rulebook s.5 and s.9: the system may recommend, a person confirms",
+      "ai_recommendation": "REJECT",
+      "engine_decision": "HUMAN_REVIEW",
+      "codes": [
+        "NAME_MISMATCH"
+      ],
+      "name_on_pan": "MANPREET GILL",
+      "names_on_other_documents": {
+        "AADHAAR_FRONT": "MANPREET GILL",
+        "AADHAAR_BACK": null,
+        "CLASS10_MARKSHEET": "RUPA SAHOO",
+        "CANCELLED_CHEQUE": "M GILL"
+      },
+      "face_match_score": 0.86,
+      "state_declared": "Madhya Pradesh",
+      "documents": [
+        {
+          "document": "PAN",
+          "ocr_confidence": 0.935
+        },
+        {
+          "document": "AADHAAR_FRONT",
+          "ocr_confidence": 0.925
+        },
+        {
+          "document": "AADHAAR_BACK",
+          "ocr_confidence": 0.914
+        },
+        {
+          "document": "CLASS10_MARKSHEET",
+          "ocr_confidence": 0.971
+        },
+        {
+          "document": "CANCELLED_CHEQUE",
+          "ocr_confidence": 0.924
+        },
+        {
+          "document": "SELFIE",
+          "ocr_confidence": 0.919
+        }
+      ],
+      "where_unsure": [
+        {
+          "check": "NAME_MISMATCH",
+          "reason": "engine check not passed"
+        }
+      ],
+      "age_hours": 61,
+      "age_label": "simulated"
+    },
+    {
+      "id": "APP-26514",
+      "kind": "test-set case",
+      "constructed": false,
+      "source": "test set (04_DATASETS); engine output eval/out/eval_predictions.csv",
+      "why_routed": "Different person's name (NAME_MISMATCH) - rulebook s.5 and s.9: the system may recommend, a person confirms",
+      "ai_recommendation": "REJECT",
+      "engine_decision": "HUMAN_REVIEW",
+      "codes": [
+        "NAME_MISMATCH"
+      ],
+      "name_on_pan": "PRITAM SINHA",
+      "names_on_other_documents": {
+        "AADHAAR_FRONT": "PRITAM SINHA",
+        "AADHAAR_BACK": null,
+        "CLASS10_MARKSHEET": "FARAH KUMARI SHAIKH",
+        "CANCELLED_CHEQUE": "P SINHA"
+      },
+      "face_match_score": 0.88,
+      "state_declared": "West Bengal",
+      "documents": [
+        {
+          "document": "PAN",
+          "ocr_confidence": 0.905
+        },
+        {
+          "document": "AADHAAR_FRONT",
+          "ocr_confidence": 0.927
+        },
+        {
+          "document": "AADHAAR_BACK",
+          "ocr_confidence": 0.885
+        },
+        {
+          "document": "CLASS10_MARKSHEET",
+          "ocr_confidence": 0.934
+        },
+        {
+          "document": "CANCELLED_CHEQUE",
+          "ocr_confidence": 0.964
+        },
+        {
+          "document": "SELFIE",
+          "ocr_confidence": 0.905
+        }
+      ],
+      "where_unsure": [
+        {
+          "check": "NAME_MISMATCH",
+          "reason": "engine check not passed"
+        }
+      ],
+      "age_hours": 45,
+      "age_label": "simulated"
+    },
+    {
+      "id": "APP-26566",
+      "kind": "test-set case",
+      "constructed": false,
+      "source": "test set (04_DATASETS); engine output eval/out/eval_predictions.csv",
+      "why_routed": "Different person's name (NAME_MISMATCH) - rulebook s.5 and s.9: the system may recommend, a person confirms",
+      "ai_recommendation": "REJECT",
+      "engine_decision": "HUMAN_REVIEW",
+      "codes": [
+        "NAME_MISMATCH"
+      ],
+      "name_on_pan": "VIVEK CHAUHAN",
+      "names_on_other_documents": {
+        "AADHAAR_FRONT": "VIVEK CHAUHAN",
+        "AADHAAR_BACK": null,
+        "CLASS10_MARKSHEET": "MANAS CHATTERJEE",
+        "CANCELLED_CHEQUE": "V CHAUHAN"
+      },
+      "face_match_score": 0.86,
+      "state_declared": "Uttar Pradesh",
+      "documents": [
+        {
+          "document": "PAN",
+          "ocr_confidence": 0.916
+        },
+        {
+          "document": "AADHAAR_FRONT",
+          "ocr_confidence": 0.947
+        },
+        {
+          "document": "AADHAAR_BACK",
+          "ocr_confidence": 0.916
+        },
+        {
+          "document": "CLASS10_MARKSHEET",
+          "ocr_confidence": 0.91
+        },
+        {
+          "document": "CANCELLED_CHEQUE",
+          "ocr_confidence": 0.927
+        },
+        {
+          "document": "SELFIE",
+          "ocr_confidence": 0.89
+        }
+      ],
+      "where_unsure": [
+        {
+          "check": "NAME_MISMATCH",
+          "reason": "engine check not passed"
+        }
+      ],
+      "age_hours": 89,
+      "age_label": "simulated"
+    },
+    {
+      "id": "APP-26575",
+      "kind": "test-set case",
+      "constructed": false,
+      "source": "test set (04_DATASETS); engine output eval/out/eval_predictions.csv",
+      "why_routed": "Different person's name (NAME_MISMATCH) - rulebook s.5 and s.9: the system may recommend, a person confirms",
+      "ai_recommendation": "REJECT",
+      "engine_decision": "HUMAN_REVIEW",
+      "codes": [
+        "NAME_MISMATCH"
+      ],
+      "name_on_pan": "PRIYANKA SINHA",
+      "names_on_other_documents": {
+        "AADHAAR_FRONT": "PRIYANKA SINHA",
+        "AADHAAR_BACK": null,
+        "CLASS10_MARKSHEET": "SANGEETHA SUBRAMANIAN",
+        "CANCELLED_CHEQUE": "PRIYANKA SINHA"
+      },
+      "face_match_score": 0.86,
+      "state_declared": "Odisha",
+      "documents": [
+        {
+          "document": "PAN",
+          "ocr_confidence": 0.971
+        },
+        {
+          "document": "AADHAAR_FRONT",
+          "ocr_confidence": 0.909
+        },
+        {
+          "document": "AADHAAR_BACK",
+          "ocr_confidence": 0.915
+        },
+        {
+          "document": "CLASS10_MARKSHEET",
+          "ocr_confidence": 0.984
+        },
+        {
+          "document": "CANCELLED_CHEQUE",
+          "ocr_confidence": 0.883
+        },
+        {
+          "document": "SELFIE",
+          "ocr_confidence": 0.971
+        }
+      ],
+      "where_unsure": [
+        {
+          "check": "NAME_MISMATCH",
+          "reason": "engine check not passed"
+        }
+      ],
+      "age_hours": 90,
+      "age_label": "simulated"
+    },
+    {
+      "id": "APP-26615",
+      "kind": "test-set case",
+      "constructed": false,
+      "source": "test set (04_DATASETS); engine output eval/out/eval_predictions.csv",
+      "why_routed": "Different person's name (NAME_MISMATCH) - rulebook s.5 and s.9: the system may recommend, a person confirms",
+      "ai_recommendation": "REJECT",
+      "engine_decision": "HUMAN_REVIEW",
+      "codes": [
+        "NAME_MISMATCH"
+      ],
+      "name_on_pan": "ARIJIT DAS",
+      "names_on_other_documents": {
+        "AADHAAR_FRONT": "ARIJIT DAS",
+        "AADHAAR_BACK": null,
+        "CLASS10_MARKSHEET": "KAVITA KUMAR",
+        "CANCELLED_CHEQUE": "ARIJIT DAS"
+      },
+      "face_match_score": 0.9,
+      "state_declared": "Odisha",
+      "documents": [
+        {
+          "document": "PAN",
+          "ocr_confidence": 0.938
+        },
+        {
+          "document": "AADHAAR_FRONT",
+          "ocr_confidence": 0.935
+        },
+        {
+          "document": "AADHAAR_BACK",
+          "ocr_confidence": 0.935
+        },
+        {
+          "document": "CLASS10_MARKSHEET",
+          "ocr_confidence": 0.919
+        },
+        {
+          "document": "CANCELLED_CHEQUE",
+          "ocr_confidence": 0.897
+        },
+        {
+          "document": "SELFIE",
+          "ocr_confidence": 0.912
+        }
+      ],
+      "where_unsure": [
+        {
+          "check": "NAME_MISMATCH",
+          "reason": "engine check not passed"
+        }
+      ],
+      "age_hours": 93,
+      "age_label": "simulated"
+    },
+    {
+      "id": "CONSTRUCTED-01",
+      "why_routed": "Face match 0.68, inside the 0.60 to 0.75 band (rulebook s.4.6 and s.9: a person compares the photos)",
+      "ai_recommendation": "No automatic outcome; route to reviewer",
+      "codes": [
+        "FACE_MATCH_REVIEW"
+      ],
+      "name_on_pan": "ASHA TESTCASE RAO",
+      "names_on_other_documents": {
+        "AADHAAR_FRONT": "ASHA TESTCASE RAO"
+      },
+      "face_match_score": 0.68,
+      "where_unsure": [
+        {
+          "check": "FACE_MATCH_REVIEW",
+          "reason": "score 0.68 in the 0.60 to 0.75 band"
+        }
+      ],
+      "kind": "constructed case",
+      "constructed": true,
+      "values_marked": "constructed",
+      "source": "constructed for the review console; not from the test set",
+      "engine_decision": null,
+      "documents": null,
+      "state_declared": null,
+      "age_hours": 31,
+      "age_label": "simulated"
+    },
+    {
+      "id": "CONSTRUCTED-02",
+      "why_routed": "Surname changed after marriage (rulebook s.5 and s.9: NEEDS_INFO, Human only; ask for a marriage certificate or gazette notification)",
+      "ai_recommendation": "NEEDS_MORE_INFO after a person confirms the surname change",
+      "codes": [
+        "SURNAME_CHANGE"
+      ],
+      "name_on_pan": "KIRAN SAMPLEVALE NAIR",
+      "names_on_other_documents": {
+        "CLASS10_MARKSHEET": "KIRAN SAMPLEVALE IYER"
+      },
+      "face_match_score": 0.91,
+      "where_unsure": [
+        {
+          "check": "SURNAME_CHANGE",
+          "reason": "surname differs between PAN and marksheet (name tier 6, Human only)"
+        }
+      ],
+      "kind": "constructed case",
+      "constructed": true,
+      "values_marked": "constructed",
+      "source": "constructed for the review console; not from the test set",
+      "engine_decision": null,
+      "documents": null,
+      "state_declared": null,
+      "age_hours": 31,
+      "age_label": "simulated"
+    },
+    {
+      "id": "CONSTRUCTED-03",
+      "why_routed": "Class 10 board not on the recognised list (rulebook s.4.4 and s.9: Human only)",
+      "ai_recommendation": "No automatic outcome; route to reviewer",
+      "codes": [
+        "BOARD_NOT_RECOGNISED"
+      ],
+      "name_on_pan": "MEERA TESTFIELD DAS",
+      "names_on_other_documents": {
+        "CLASS10_MARKSHEET": "MEERA TESTFIELD DAS"
+      },
+      "board_read": "Sample Regional Board (constructed; not on the recognised list)",
+      "face_match_score": 0.9,
+      "where_unsure": [
+        {
+          "check": "BOARD_NOT_RECOGNISED",
+          "reason": "board not on the recognised list"
+        }
+      ],
+      "kind": "constructed case",
+      "constructed": true,
+      "values_marked": "constructed",
+      "source": "constructed for the review console; not from the test set",
+      "engine_decision": null,
+      "documents": null,
+      "state_declared": null,
+      "age_hours": 30,
+      "age_label": "simulated"
+    },
+    {
+      "id": "CONSTRUCTED-04",
+      "why_routed": "Applicant disputes a PAN_NOT_INDIVIDUAL rejection (rulebook s.9: any disputed case goes to a person; outcomes Uphold / Ask / Overturn)",
+      "ai_recommendation": "REJECT stands unless the reviewer overturns it",
+      "codes": [
+        "PAN_NOT_INDIVIDUAL"
+      ],
+      "name_on_pan": "DEVI SAMPLEPATH",
+      "names_on_other_documents": {
+        "AADHAAR_FRONT": "DEVI SAMPLEPATH"
+      },
+      "pan_holder_type_read": "company holder code (constructed value)",
+      "face_match_score": 0.89,
+      "applicant_dispute": "Constructed: the applicant says the PAN was issued to them personally.",
+      "where_unsure": [
+        {
+          "check": "PAN_NOT_INDIVIDUAL",
+          "reason": "applicant disputes the holder-type reading"
+        }
+      ],
+      "kind": "constructed case",
+      "constructed": true,
+      "values_marked": "constructed",
+      "source": "constructed for the review console; not from the test set",
+      "engine_decision": null,
+      "documents": null,
+      "state_declared": null,
+      "age_hours": 70,
+      "age_label": "simulated"
+    },
+    {
+      "id": "CONSTRUCTED-05",
+      "why_routed": "Two selfie failures in a row below 0.60 (rulebook s.4.6 and s.7: internal fraud-desk referral, same day, to compliance; the applicant sees only a neutral message)",
+      "ai_recommendation": "Internal fraud-desk referral (second consecutive failure)",
+      "codes": [
+        "FACE_MATCH_LOW",
+        "FACE_MATCH_LOW_REPEAT"
+      ],
+      "name_on_pan": "TARUN SAMPLEKUMAR GHOSH",
+      "names_on_other_documents": {
+        "AADHAAR_FRONT": "TARUN SAMPLEKUMAR GHOSH"
+      },
+      "face_match_scores": [
+        0.54,
+        0.57
+      ],
+      "where_unsure": [
+        {
+          "check": "FACE_MATCH_LOW_REPEAT",
+          "reason": "two consecutive selfie scores below 0.60"
+        }
+      ],
+      "kind": "constructed case",
+      "constructed": true,
+      "values_marked": "constructed",
+      "source": "constructed for the review console; not from the test set",
+      "engine_decision": null,
+      "documents": null,
+      "state_declared": null,
+      "age_hours": 8,
+      "age_label": "simulated"
+    }
+  ]
+}

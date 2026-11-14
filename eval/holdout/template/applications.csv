@@ -1,0 +1,1 @@
+application_id,created_at,channel,state,city,applicant_name,gender,dob_declared,mobile_masked,pan_declared,aadhaar_masked,education_declared,bank_name,ifsc,account_last4,docs_submitted_at,kyc_verified_at,training_started_at,training_completed_at,exam_passed_at,certified_at,status,rejection_reason,ops_reviewer_id,manual_touches,resubmissions,hours_to_certify
