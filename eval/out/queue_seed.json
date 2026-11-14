@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-11-14T19:17:06.338Z",
-  "engine_sha256": "c5da9cfb54f8e716b9630a7075a9f25db04e47cc696061ee7136e98019bce367",
+  "generated_at": "2026-11-14T19:58:47.068Z",
+  "engine_sha256": "c206388747e8381e0ce21f7677cfb83594b51db9f6581b6aca3f1d1ed9824350",
   "note": "Seeded reviewer queue for the Review console (FR-62). 11 cases are test-set applications the engine routes to a person. All 11 engine-routed test-set cases are different-person name cases (NAME_MISMATCH); APP-26016 also carries DOB_MISMATCH and APP-26115 also carries BANK_NAME_MISMATCH. The other Human-only kinds exist only as constructed cases because the test set has none. Each constructed case is flagged constructed: true and lists its made-up fields in constructed_fields; constructed values are not evidence. Constructed cases were not run through the engine. Ages are simulated and deterministic. The AI recommendation for test-set cases is the engine output; dataset truth labels are deliberately not included. Aadhaar and PAN numbers are omitted.",
   "cases": [
     {

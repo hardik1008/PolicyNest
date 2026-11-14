@@ -7,7 +7,7 @@ import hashlib, os, re, subprocess, sys, tempfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "policynest_mvp", "PolicyNest.html")
-PINNED = "c5da9cfb54f8e716b9630a7075a9f25db04e47cc696061ee7136e98019bce367"
+PINNED = "c206388747e8381e0ce21f7677cfb83594b51db9f6581b6aca3f1d1ed9824350"  # re-pinned 15 Nov: FR-27 wording in rejectReasons; 600 predictions identical
 
 # FR-36 and RB §8: phrases that must not appear anywhere in the app source.
 BANNED = [
