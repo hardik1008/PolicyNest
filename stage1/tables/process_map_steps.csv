@@ -1,0 +1,11 @@
+step,actor,apps_entering,apps_lost,lost_pct_of_entering,timed_instances,median_hours,p90_hours,median_days,p90_days
+2 Upload documents,Applicant,3000,258,8.6,2742,17.9,46.3,0.75,1.93
+3 Wait for a reviewer,Queue: nobody acts; an ops reviewer picks the file up,2742,0,0.0,2742,17.3,38.2,0.72,1.59
+4 First review,"Ops reviewer (22 reviewers, OPS-01..22)",2742,314,11.5,2742,0.2,0.4,0.01,0.01
+4a Applicant fixes returned documents,Applicant (after a reviewer returns the file),774,211,27.3,638,39.0,88.6,1.63,3.69
+4b Wait for re-check,Queue: nobody acts; an ops reviewer resumes the file,582,0,0.0,638,14.6,33.6,0.61,1.40
+4c Re-check after fix,Ops reviewer,582,0,0.0,638,0.2,0.3,0.01,0.01
+5 Start training,Applicant (the log shows no system reminder),2217,482,21.7,1735,23.3,60.6,0.97,2.52
+6 Training (15 h),Applicant on the training platform,1735,0,0.0,1735,69.5,146.3,2.90,6.09
+7 Exam,Applicant (retakes included),1735,0,0.0,1735,19.8,65.5,0.83,2.73
+8 Certificate,System,1735,0,0.0,1732,10.7,28.9,0.45,1.20

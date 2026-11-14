@@ -1,0 +1,20 @@
+cut,group,apps,lost_or_detail,rate
+"silence after first return, by reason",poor image,377,97,25.7
+"silence after first return, by reason",name spelling,130,47,36.2
+"silence after first return, by reason",DOB mismatch,110,35,31.8
+"silence after first return, by reason",bank name,102,23,22.5
+"silence after first return, by reason",face match,55,9,16.4
+silence by queue-wait quartile (hours before the first review),Q1: 0.1-9.9 h,193,52,26.9
+silence by queue-wait quartile (hours before the first review),Q2: 10.0-17.0 h,194,43,22.2
+silence by queue-wait quartile (hours before the first review),Q3: 17.0-27.1 h,193,60,31.1
+silence by queue-wait quartile (hours before the first review),Q4: 27.1-83.0 h,194,56,28.9
+"no training start after KYC, by review-zone quartile (hours docs to KYC)",Q1: 0.4-12.7 h,554,131,23.6
+"no training start after KYC, by review-zone quartile (hours docs to KYC)",Q2: 12.8-23.9 h,554,108,19.5
+"no training start after KYC, by review-zone quartile (hours docs to KYC)",Q3: 23.9-49.5 h,554,130,23.5
+"no training start after KYC, by review-zone quartile (hours docs to KYC)",Q4: 49.5-308.8 h,555,113,20.4
+"no training start after KYC, by path",returned before KYC,563,119,21.1
+"no training start after KYC, by path",not returned,1654,363,21.9
+outcome by channel (apps | certified | no docs | verified | verified but no training),Agent app,1524,850 | 147 | 1105 | 254,cert 55.8%; no docs 9.6%; no training 23.0%
+outcome by channel (apps | certified | no docs | verified | verified but no training),Field referral,923,556 | 68 | 707 | 150,cert 60.2%; no docs 7.4%; no training 21.2%
+outcome by channel (apps | certified | no docs | verified | verified but no training),Web,528,311 | 40 | 386 | 74,cert 58.9%; no docs 7.6%; no training 19.2%
+outcome by channel (apps | certified | no docs | verified | verified but no training),(blank),25,15 | 3 | 19 | 4,cert 60.0%; no docs 12.0%; no training 21.1%

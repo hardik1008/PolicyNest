@@ -1,0 +1,83 @@
+"""Rebuild site/index.html (the hosted copy) from PolicyNest.html (the source).
+
+Run from anywhere:  python policynest_mvp/build_site.py
+PolicyNest.html has no <html>/<head>/<body> tags (the claude.ai artifact viewer adds them),
+so this wraps it into a standalone page and copies the two worker shim files.
+"""
+from pathlib import Path
+
+here = Path(__file__).resolve().parent
+src = (here / "PolicyNest.html").read_text(encoding="utf-8")
+cut = src.index("</style>") + len("</style>")
+page = (
+    '<!DOCTYPE html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
+    '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
+    + src[:cut]
+    + '\n</head>\n<body style="margin:0">\n'
+    + src[cut:]
+    + "\n</body>\n</html>\n"
+)
+site = here / "site"
+site.mkdir(exist_ok=True)
+(site / "index.html").write_text(page, encoding="utf-8")
+for name in ("ocr-worker.js", "pdf-worker.js"):
+    (site / name).write_text((here / name).read_text(encoding="utf-8"), encoding="utf-8")
+# Tesseract core wasm, served same-origin: the small core build loads its .wasm from
+# the worker's own folder (site root), avoiding the data: URL that Embarko's CSP blocks.
+for wasm in (here / "vendor").glob("*.wasm"):
+    (site / wasm.name).write_bytes(wasm.read_bytes())
+
+# Onboarding Copilot knowledge base: heading-sized chunks of the rulebook and reference docs,
+# searched in the browser (BM25). The PS-01 Bible is left out: it is pitch material, not rules.
+import json, re
+root = here.parent
+CORPUS = [
+    ("03_RULEBOOK_AND_REGULATIONS/PS-01_ONBOARDING_RULEBOOK_V3_2.md", "Rulebook"),
+    ("08_REFERENCE_MATERIALS/IRDAI_REGULATORY_FRAMEWORK_REFERENCE.md", "IRDAI reference"),
+    ("03_RULEBOOK_AND_REGULATIONS/REGULATORY_REQUIREMENTS_MATRIX.md", "Regulatory matrix"),
+    ("05_SPECIMEN_DOCUMENTS/SPECIMEN_DEFECT_TAXONOMY_GUIDE.md", "Defect guide"),
+    ("07_WORKFLOW_AND_BUSINESS_LOGIC/04_CONSOLIDATED_REWORK_ENGINE.md", "Rework spec"),
+    ("07_WORKFLOW_AND_BUSINESS_LOGIC/02_NAME_MATCHING_AND_IDENTITY_TAXONOMY.md", "Name-matching spec"),
+]
+chunks = []
+for rel, label in CORPUS:
+    p = root / rel
+    if not p.is_file():
+        print("KB: missing", rel)
+        continue
+    head, buf = label, []
+    def flush():
+        text = "\n".join(buf).strip()
+        # long sections are split at ~1600 characters on paragraph breaks
+        while text:
+            part = text[:1600]
+            if len(text) > 1600 and "\n\n" in part:
+                part = part[: part.rfind("\n\n")]
+            text = text[len(part):].strip()
+            if len(part) > 40:
+                sec = re.match(r"#+\s*([\d.]+)", head)
+                cite = f"{label} §{sec.group(1).rstrip('.')}" if sec else label
+                chunks.append({"id": len(chunks), "src": rel, "cite": cite,
+                               "head": re.sub(r"^#+\s*", "", head), "text": part})
+    for line in p.read_text(encoding="utf-8").splitlines():
+        if re.match(r"^#{1,3}\s", line):
+            flush(); buf = []; head = line
+        else:
+            buf.append(line)
+    flush()
+(site / "kb.json").write_text(json.dumps(chunks, ensure_ascii=False), encoding="utf-8")
+print("KB:", len(chunks), "chunks")
+
+# Secrets never ship: the Copilot key lives only in .env / the proxy app's env vars.
+env = root / ".env"
+key = ""
+if env.is_file():
+    for line in env.read_text(encoding="utf-8").splitlines():
+        if line.startswith("ANTHROPIC_API_KEY="):
+            key = line.split("=", 1)[1].strip()
+for f in site.rglob("*"):
+    if f.is_file() and f.suffix in (".html", ".js", ".json"):
+        t = f.read_text(encoding="utf-8", errors="ignore")
+        if "sk-ant-" in t or (key and not key.startswith("your-") and key in t):
+            raise SystemExit(f"Refusing to build: an API key appears in {f}")
+print("Built", site / "index.html")

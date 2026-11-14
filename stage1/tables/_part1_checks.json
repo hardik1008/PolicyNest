@@ -1,0 +1,18 @@
+{
+ "application_rows": 3018,
+ "unique": 3000,
+ "dups_removed": 18,
+ "event_rows": 21188,
+ "event_dups": 0,
+ "status": {
+  "DROPPED": 951,
+  "CERTIFIED": 1732,
+  "REJECTED": 314,
+  "IN_PROGRESS": 3
+ },
+ "status_vs_last_event_mismatches": 0,
+ "e2e_n": 1732,
+ "e2e_median_h": 201.85326042908127,
+ "e2e_p90_h": 312.17687090322727,
+ "e2e_p25_h": 157.70338002192148
+}

@@ -1,0 +1,89 @@
+{
+ "certified": 1732,
+ "returned_share_of_certified": 0.2564,
+ "today": {
+  "median": 8.41,
+  "p25": 6.57,
+  "p90": 13.01
+ },
+ "engine": {
+  "median": 7.4,
+  "p25": 5.62,
+  "p90": 11.47
+ },
+ "engine_plus_training_link": {
+  "median": 6.11,
+  "p25": 4.55,
+  "p90": 10.34
+ },
+ "hist_bins_days": [
+  "0",
+  "1",
+  "2",
+  "3",
+  "4",
+  "5",
+  "6",
+  "7",
+  "8",
+  "9",
+  "10",
+  "11",
+  "12",
+  "13",
+  "14",
+  "15"
+ ],
+ "hist_today": [
+  0,
+  0,
+  12,
+  45,
+  108,
+  154,
+  228,
+  224,
+  206,
+  188,
+  161,
+  129,
+  103,
+  59,
+  39,
+  76
+ ],
+ "hist_engine": [
+  0,
+  4,
+  31,
+  100,
+  175,
+  234,
+  248,
+  211,
+  193,
+  172,
+  143,
+  80,
+  56,
+  35,
+  18,
+  32
+ ],
+ "review_zone_median_hours_today": 23.8,
+ "review_zone_median_hours_engine": 0.17,
+ "silence": {
+  "returned_apps": 774,
+  "silent_today": 211,
+  "rate_today": 0.2726,
+  "target_rate": 0.1,
+  "repliers_certify_rate": 0.7886,
+  "extra_agents_if_target": 106,
+  "certified_today": 1732
+ },
+ "reviewer_minutes": {
+  "today_mean_per_application": 20.7,
+  "routed_share": 0.0183,
+  "estimate_per_application": 0.38
+ }
+}

@@ -1,0 +1,4 @@
+scenario,median_days,p90_days,status
+"today (1,732 certified)",8.41,13.01,MEASURED
+product decides each pass in 10 min; applicant reply times kept; one round only,7.40,11.47,ESTIMATE (replay of observed journeys)
+as above and the training link sent at once (KYC to start capped at 1 h),6.11,10.34,ESTIMATE; the 1-hour cap is an ASSUMPTION

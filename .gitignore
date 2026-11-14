@@ -1,0 +1,16 @@
+# Secrets: never commit (CLAUDE.md)
+.env
+.env.*
+!.env.example
+
+# Possibly real people's documents: never opened, never committed (brief §5, CLAUDE.md)
+05_SPECIMEN_DOCUMENTS/sample_specimens/
+
+# The autoresearch run keeps its own git repository
+autoresearch/*/workspace/
+
+# Tooling and caches
+node_modules/
+__pycache__/
+*.pyc
+.claude/settings.local.json

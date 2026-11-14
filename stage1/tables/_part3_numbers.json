@@ -1,0 +1,60 @@
+{
+ "rate_mean": 430.0,
+ "rate_weighted_by_apps_handled": 430.01325381047053,
+ "rate_min_max": [
+  380.0,
+  480.0
+ ],
+ "minutes_per_app_mean": 20.707333333333334,
+ "minutes_per_app_median": 20.2,
+ "minutes_per_doc_mean": 3.4512222222222224,
+ "minutes_per_app_n": 600,
+ "apps": 3000,
+ "reviewed": 2742,
+ "resumed": 638,
+ "touches": 9920,
+ "reviewer_events": 6760,
+ "exam_fail": 160,
+ "touches_minus_reviewer_events": 3160,
+ "base_low_h": 946.3251333333334,
+ "base_mid_h": 983.0231296296297,
+ "base_high_h": 1166.5131111111111,
+ "recheck_h": 36.697996296296296,
+ "floor_saved_h": 567.79508,
+ "target_saved_h": 717.8251333333334,
+ "package_style_touches_x_pass_h": 3423.6124444444445,
+ "routed_minutes_per_file_at_floor": 8.282933333333334,
+ "max_minutes_per_routed_case_for_target_at_60pct_stp": 12.5,
+ "team_hours_per_reviewer_per_month_baseline_A": 4.779419865319865,
+ "wait_hours_total": 68104.01892003499,
+ "wait_passes": 3380,
+ "wait_mean_per_pass": 20.14911802367899,
+ "new_hours_at_10min": 563.3333333333333,
+ "wait_saved_all_passes": 67540.68558670166,
+ "wait_saved_at_60pct": 40524.411352020994,
+ "queue_first_mean_h": 20.437721599167695,
+ "queue_recheck_mean_h": 17.687152769255267,
+ "days_today": [
+  8.410552517878386,
+  13.007369620967802
+ ],
+ "days_engine": [
+  7.400687439373642,
+  11.46541725248163
+ ],
+ "days_engine_link": [
+  6.113635855659393,
+  10.338335256256121
+ ],
+ "hours_saved_per_certified_mean": 26.70938313039162,
+ "hours_saved_per_certified_median": 21.759355796083895,
+ "lost_nodocs": 258,
+ "lost_silent": 211,
+ "lost_notrain": 482,
+ "rejected": 314,
+ "returned": 774,
+ "replied": 582,
+ "cert_rate_given_replied": 0.7628865979381443,
+ "cert_rate_given_training_started": 0.9982708933717579,
+ "cert_rate_returned_once": null
+}

@@ -1,0 +1,56 @@
+{
+ "reasons": {
+  "EDU_NOT_ELIGIBLE": [
+   21,
+   21
+  ],
+  "POOR_QUALITY": [
+   110,
+   110
+  ],
+  "FACE_LOW": [
+   22,
+   22
+  ],
+  "UNDERAGE": [
+   6,
+   6
+  ],
+  "NAME_SPELLING": [
+   37,
+   34
+  ],
+  "NAME_MISMATCH_HARD": [
+   12,
+   12
+  ],
+  "DOB_MISMATCH": [
+   29,
+   27
+  ],
+  "PAN_FORMAT_INVALID": [
+   7,
+   7
+  ],
+  "BANK_NAME_MISMATCH": [
+   31,
+   28
+  ],
+  "ALREADY_REGISTERED": [
+   14,
+   14
+  ],
+  "PAN_NOT_INDIVIDUAL": [
+   2,
+   2
+  ]
+ },
+ "nmi_full": [
+  170,
+  176
+ ],
+ "reviewer_rollup_acc": 0.87,
+ "human_routed_truth": {
+  "REJECT": 11
+ }
+}

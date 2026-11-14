@@ -1,0 +1,152 @@
+{
+ "run_at": "2026-11-13T19:30:11.942Z",
+ "engine": "policy-engine 3.4.0 · rulebook v3.2 · OCR-read cross-checks · simulated external services",
+ "n": 600,
+ "accuracy": 1,
+ "engine_ms_per_application": 0.03879852666666671,
+ "confusion_rows_truth_cols_pred": {
+  "APPROVE": {
+   "APPROVE": 364,
+   "NEEDS_MORE_INFO": 0,
+   "REJECT": 0
+  },
+  "NEEDS_MORE_INFO": {
+   "APPROVE": 0,
+   "NEEDS_MORE_INFO": 176,
+   "REJECT": 0
+  },
+  "REJECT": {
+   "APPROVE": 0,
+   "NEEDS_MORE_INFO": 0,
+   "REJECT": 60
+  }
+ },
+ "REJECT": {
+  "precision": 1,
+  "recall": 1,
+  "tp": 60,
+  "predicted": 60,
+  "actual": 60
+ },
+ "NEEDS_MORE_INFO": {
+  "precision": 1,
+  "recall": 1,
+  "tp": 176,
+  "predicted": 176,
+  "actual": 176
+ },
+ "APPROVE": {
+  "precision": 1,
+  "recall": 1,
+  "tp": 364,
+  "predicted": 364,
+  "actual": 364
+ },
+ "reject_recall_incl_routed_to_human": 1,
+ "straight_through_rate": 0.9816666666666667,
+ "routed_to_human": 11,
+ "wrongful_approvals": 0,
+ "follow_up": {
+  "applications": 176,
+  "messages_per_application": 1,
+  "mean_items": 1.3068181818181819
+ },
+ "by_gender": {
+  "M": {
+   "n": 423,
+   "accuracy": 1
+  },
+  "F": {
+   "n": 177,
+   "accuracy": 1
+  }
+ },
+ "by_state": {
+  "Maharashtra": {
+   "n": 79,
+   "accuracy": 1
+  },
+  "Uttar Pradesh": {
+   "n": 75,
+   "accuracy": 1
+  },
+  "Madhya Pradesh": {
+   "n": 56,
+   "accuracy": 1
+  },
+  "Gujarat": {
+   "n": 52,
+   "accuracy": 1
+  },
+  "Rajasthan": {
+   "n": 47,
+   "accuracy": 1
+  },
+  "Tamil Nadu": {
+   "n": 41,
+   "accuracy": 1
+  },
+  "Bihar": {
+   "n": 40,
+   "accuracy": 1
+  },
+  "Karnataka": {
+   "n": 39,
+   "accuracy": 1
+  },
+  "Odisha": {
+   "n": 34,
+   "accuracy": 1
+  },
+  "Haryana": {
+   "n": 31,
+   "accuracy": 1
+  },
+  "Delhi": {
+   "n": 30,
+   "accuracy": 1
+  },
+  "West Bengal": {
+   "n": 28,
+   "accuracy": 1
+  },
+  "Punjab": {
+   "n": 27,
+   "accuracy": 1
+  },
+  "Telangana": {
+   "n": 21,
+   "accuracy": 1
+  }
+ },
+ "by_name_pattern": {
+  "EXACT": {
+   "n": 436,
+   "accuracy": 1
+  },
+  "SPELLING": {
+   "n": 36,
+   "accuracy": 1
+  },
+  "SWAP": {
+   "n": 36,
+   "accuracy": 1
+  },
+  "MIDDLE_MISSING": {
+   "n": 29,
+   "accuracy": 1
+  },
+  "INITIAL": {
+   "n": 28,
+   "accuracy": 1
+  },
+  "MIDDLE_ADDED": {
+   "n": 23,
+   "accuracy": 1
+  },
+  "DIFFERENT": {
+   "n": 12,
+   "accuracy": 1
+  }
+ }
+}

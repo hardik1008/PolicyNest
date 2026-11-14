@@ -1,0 +1,7 @@
+line,hours,note
+"applicant waiting hours today (queue + review elapsed), first passes: 2,742","56,681",MEASURED from stage_events
+"applicant waiting hours today, re-check passes: 582 files / 638 passes","11,423",MEASURED from stage_events
+total,"68,104",mean 20.1 h per pass over 3380 passes
+at the 10-minute target on every pass,563,ASSUMPTION: Table 7 target applied to every pass
+saved if every pass meets the target,"67,541","ESTIMATE, upper end"
+saved if only 60% of passes (the straight-through floor) are decided in 10 minutes,"40,524","ESTIMATE, floor"

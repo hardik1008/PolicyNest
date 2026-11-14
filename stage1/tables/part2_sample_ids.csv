@@ -1,0 +1,21 @@
+application_id,stratum
+APP-26016,hard (random)
+APP-26017,PAN malformed or not type P
+APP-26061,hard (random)
+APP-26100,face score < 0.60
+APP-26131,hard (random)
+APP-26216,hard (random)
+APP-26260,bad-quality document
+APP-26322,plain
+APP-26336,plain
+APP-26391,hard (random)
+APP-26402,hard (random)
+APP-26405,hard (random)
+APP-26442,hard (random)
+APP-26461,IRDAI registry hit
+APP-26464,hard (random)
+APP-26475,bad-quality document
+APP-26478,bad-quality document
+APP-26590,plain
+APP-26610,education unusual
+APP-26644,hard (random)

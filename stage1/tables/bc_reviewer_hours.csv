@@ -1,0 +1,8 @@
+line,hours_9_months,hours_per_month,inr_at_430_per_hour,inr_lakh,status
+"Baseline A: first review pass only (2,742 files x 20.7 min)",946,105.1,"406,920",4.07,"ESTIMATE. Minutes from the 600-application test set; all 2,742 reviewed files assumed to cost the same"
+Baseline B: A + 638 re-checks at one document each (3.45 min),983,109.2,"422,700",4.23,ESTIMATE. Re-check effort is an assumption; no data
+"Baseline C: every one of 3,380 review sessions costs a full 20.7-min pass","1,167",129.6,"501,601",5.02,"ESTIMATE, upper bound"
+"Package style: 9,920 touches x 20.7 min (NOT USED)","3,424",380.4,"1,472,153",14.72,"Not used. 3,000 touches are not reviewer actions (see pack section 3.2)"
+Saved at the straight-through floor: 60% of files need no reviewer (vs A),568,63.1,"244,152",2.44,"ESTIMATE. Routed 40% still cost the full 20.7 min, i.e. 8.3 min per file"
+Saved at the minutes target: <5 min per file averaged over all files (vs A),718,79.8,"308,665",3.09,ESTIMATE. Brief Table 7 target; 76% less reviewer time
+"Extra saving, re-checks no longer done by a person (vs B-A)",37,4.1,"15,780",0.16,"ESTIMATE, low confidence"

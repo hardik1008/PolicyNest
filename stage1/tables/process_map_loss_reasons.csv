@@ -1,0 +1,12 @@
+step,reason_from_event_note,apps
+5 Start training,Training not started within 14 days,482
+4 First review,Rejected: EDU_NOT_ELIGIBLE,87
+4 First review,Rejected: ALREADY_REGISTERED,75
+4 First review,Rejected: NAME_MISMATCH_HARD,53
+4 First review,Rejected: UNDERAGE,49
+4 First review,Rejected: PAN_FORMAT_INVALID,37
+4 First review,Rejected: PAN_NOT_INDIVIDUAL,13
+7 Exam,"not lost: failed first attempt, passed on retake",160
+4a Applicant fixes returned documents,No response to document request in 10 days,211
+2 Upload documents,No documents uploaded within 7 days,258
+8 Certificate,"not lost: exam passed, certificate not yet issued at 30 Sep",3

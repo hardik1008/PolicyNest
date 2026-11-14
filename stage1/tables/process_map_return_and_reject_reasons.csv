@@ -1,0 +1,12 @@
+event,note,events
+DOC_RETURNED,Image blurry or cropped; asked to re-upload,423
+DOC_RETURNED,Name on PAN differs in spelling from marksheet; asked for gazette/affidavit or corrected document,130
+DOC_RETURNED,DOB on Aadhaar differs from PAN; asked for corrected document,115
+DOC_RETURNED,Account holder name on cheque does not match PAN; asked for own-name account,111
+DOC_RETURNED,Photo does not match PAN photo; asked for fresh selfie,70
+REJECTED,Rejected: EDU_NOT_ELIGIBLE,87
+REJECTED,Rejected: ALREADY_REGISTERED,75
+REJECTED,Rejected: NAME_MISMATCH_HARD,53
+REJECTED,Rejected: UNDERAGE,49
+REJECTED,Rejected: PAN_FORMAT_INVALID,37
+REJECTED,Rejected: PAN_NOT_INDIVIDUAL,13
