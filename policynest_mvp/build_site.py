@@ -107,4 +107,22 @@ for f in site.rglob("*"):
         t = f.read_text(encoding="utf-8", errors="ignore")
         if "sk-ant-" in t or (key and not key.startswith("your-") and key in t):
             raise SystemExit(f"Refusing to build: an API key appears in {f}")
+# FR-57: warn (never fail) when the engine block has changed since the evaluation was measured.
+# Same canonicalisation as tools/check_pack.py: text from "/* ENGINE:START" up to "/* ENGINE:END */", CRLF -> LF.
+import hashlib
+import json as _json
+a, b = src.find("/* ENGINE:START"), src.find("/* ENGINE:END */")
+engine_now = hashlib.sha256(src[a:b].replace("\r\n", "\n").encode("utf-8")).hexdigest() if a >= 0 and b > a else ""
+res_path = root / "eval" / "out" / "eval_results.json"
+measured = ""
+if res_path.is_file():
+    measured = str(_json.loads(res_path.read_text(encoding="utf-8")).get("engine_sha256", ""))
+if not engine_now:
+    print("WARNING: engine block markers not found; evaluation hash not checked")
+elif not measured:
+    print("WARNING: eval/out/eval_results.json has no engine_sha256; evaluation hash not checked")
+elif engine_now != measured:
+    print("WARNING: engine hash " + engine_now[:12] + " differs from the evaluation's " + measured[:12] + ": the Evaluation page figures were measured on different code. Re-run eval/run_eval.js.")
+else:
+    print("Engine hash " + engine_now[:12] + " matches eval/out/eval_results.json")
 print("Built", site / "index.html")
