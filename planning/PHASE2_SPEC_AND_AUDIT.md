@@ -64,7 +64,7 @@ Each item has an ID, what it does, acceptance criteria (checked in the browser o
 
 | ID | What | Acceptance |
 |---|---|---|
-| D1 | `planning/DISCOVERY_QUESTIONS.md`: the brief's 10 questions, each with today's assumption | You either add answers or confirm "not asked" |
+| D1 | `planning/DISCOVERY_QUESTIONS.md`: the brief's nine questions, each with today's assumption | You either add answers or confirm "not asked" |
 
 ### X: executive presentation (Gap 6)
 
@@ -147,7 +147,7 @@ All recommended answers were accepted. These settle every **[decision]** tag abo
 | Q10 | Wording B of the follow-up is shown on a printed card; the engine is not changed for it |
 | Q11 | Five applicants from outside the team (≥ 2 fitting the POSP profile: phone-first, Hindi-comfortable); two reviewers who have not seen the app |
 | Q12 | Claude makes printable specimen documents (generic layouts, fictional data, SPECIMEN across them); the user prints and photographs them on two phones |
-| Q13 | No discovery meeting took place: the brief's 10 questions are recorded as "not asked", each with today's assumption |
+| Q13 | No discovery meeting took place: the brief's nine questions are recorded as "not asked", each with today's assumption |
 | Q14 | A deck of about 10 slides for a 7–10 minute talk, exportable to .pptx or PDF |
 | Q15 | Accessibility fixes (Gap 0) come first |
 | Q16 | Add the Stage 1 process map from `stage_events`, shown on the Evaluation page |
