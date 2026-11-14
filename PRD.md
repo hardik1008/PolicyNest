@@ -1,6 +1,7 @@
 # PolicyNest onboarding: product requirements and build roadmap
 
-- **Status:** draft for human review. Written 14 Nov 2026 by following Matt Pocock's `to-spec` skill. This folder has no issue tracker, so the spec is written here and not published, and the `ready-for-agent` label is not applied. **Nothing in this document is approved, and nothing gets built until the user says go** (CLAUDE.md, Phase 1–3 decisions).
+- **Status (updated 15 Nov 2026):** scope and plan confirmed by the user (section below). **Step 0 and pass 3 are built and live; the build is paused** for a second planning review. Pass 1 onwards waits for the user's go. Progress, evidence and the hand-over are in `BUILD_LOG.md`.
+- **Origin:** written 14 Nov 2026 by following Matt Pocock's `to-spec` skill. This folder had no issue tracker (it is a git repository since 15 Nov, with no remote), so the spec lives here, is not published, and has no `ready-for-agent` label.
 - **Built on:** `RECONCILED_FINDINGS.md` (80 findings `RF-nn`, 18 contradictions `CX-nn`) and `GRILL_LOG.md` (46 decisions `G-nn`, every one marked "AI-answered — needs human confirmation"), plus `GLOSSARY.md` and `docs/adr/0001`–`0009`. The terms used below are the glossary's.
 - **Source references:** "Brief" = `01_ORIGINAL_CHALLENGE/PS-01_CHALLENGE_BRIEF.md`; "RB §" = rulebook v3.2 section; "SM" = the state machine spec; "PRODUCT" = the goal IDs in `PRODUCT.md`; "Q-n" = the user's Phase 3 decisions (`planning/PHASE2_SPEC_AND_AUDIT.md` Part D).
 - **One deviation from to-spec:** to-spec keeps file paths out of a spec. The roadmap (§16) is an exception, because the task asks for owned files per workstream. Everything above §16 is written without paths.
@@ -24,7 +25,20 @@ A grill-me round with the user on 15 Nov (11 questions, all answered "yes") **na
 | U10 | Exam pass mark **50%**, labelled "demo rule from the state machine"; ask the problem owner (G-01). | FR-34 label. |
 | U11 | Shared understanding confirmed; update PRD and GRILL_LOG only. **Building still waits for a separate go.** | This section. |
 
-Also decided by the user on 14 Nov (CLAUDE.md), and **already built and live** in the proxy: 20 questions per 10 minutes per client, a global cap of 30 per minute, **50 AI answers per UTC day** (not the 200 proposed in G-25), client address = second entry from the right of `X-Forwarded-For`, and no `null` origin. FR-50 is therefore built, pending a re-check. The proxy still accepts passages sent by the browser (checked 15 Nov); pass 3 fixes that.
+Also decided by the user on 14 Nov (CLAUDE.md), and **built and live** in the proxy: 20 questions per 10 minutes per client, a global cap of 30 per minute, **50 AI answers per UTC day** (not the 200 proposed in G-25), client address = second entry from the right of `X-Forwarded-For`, and no `null` origin. FR-50 is built; its contract tests pass (pass 3) and the live proxy refuses `Origin: null`.
+
+### Progress (updated 15 Nov 2026; build paused)
+
+| Step | State | Evidence | Commit |
+|---|---|---|---|
+| 0 | **Done.** Git repository; Node 26.13.1; evaluation re-run on today's engine; results carry `engine_sha256` | Re-run identical to 13 Nov (all figures and all 600 predictions); hash `c5da9cfb54f8e716…` matches source, build and live | `f3e5dba`, `e3ed958` |
+| Pass 3 | **Done and live.** Server-side retrieval, client passages ignored, context schema, ID-number refusal, output filter, Haiku without the fallback beta; applicant-safe corpus (13 of 55 passages had fraud-desk wording removed; 0 left) | 14 contract tests pass; live proxy healthy, refuses `null`, reports `no_key`; live `kb.json` identical to local | `4c87e19` |
+| Key | **Waiting for the user.** AI answers stay off until `ANTHROPIC_API_KEY` is added to `policynest-copilot` | — | — |
+| Pass 1 | Not started | — | — |
+| Pass 2 | Not started | — | — |
+| Original list, docs | Not started (CLAUDE.md was updated for pass 3) | — | — |
+
+Requirements now **built and verified**: FR-46 (server side), FR-47, FR-48, FR-49 (server side), FR-50, FR-51, FR-57 (runner side), FR-58, FR-65, FR-66, FR-67. Not verified live: an AI answer through the new lookup (no key yet), and T1–T10 clicked through after this deploy (the app page itself is unchanged; its engine hash matches).
 
 ### The confirmed plan
 
@@ -44,7 +58,9 @@ Also decided by the user on 14 Nov (CLAUDE.md), and **already built and live** i
 
 ### Before-judging checklist
 
-- [ ] Step 0, passes 1–3 deployed and checked live
+- [x] Step 0 done (15 Nov)
+- [x] Pass 3 deployed and checked live (15 Nov)
+- [ ] Passes 1 and 2 deployed and checked live
 - [ ] AI key added; one supervised round of answers checked against the guardrails
 - [ ] Usability tests: 5 applicants, 2 reviewers; results in `planning/usability/results.csv` with codes only (FR-71)
 - [ ] A team member adopts or overrules each of the 20 hand-decided cases (FR-73)
