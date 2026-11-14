@@ -26,7 +26,7 @@
 |---|---|---|
 | V1 | Live site `https://policynest.embarko.app/?v=<epoch>` | `200`. `Last-Modified: Sat, 14 Nov 2026 16:43:50 GMT`. Contains the focus bar, the save key `pn-onboarding-v1`, "pass mark is 50%" (3 occurrences, 0 of "40%"), and the Copilot URL. **The S1–S5 build is live**, so CR's statement that the live site is pre-plan is now out of date. |
 | V2 | Live HTML vs local `policynest_mvp/site/index.html` | They differ only by a script that Embarko appends (a hosting badge, about 130 lines at the end). |
-| V3 | Engine block SHA-256 (text between `/* ENGINE:START` and `/* ENGINE:END */`, LF line endings) | `bd41031462336892…` in **all three**: live, `PolicyNest.html`, `site/index.html`. Engine string `policy-engine 3.4.0`. |
+| V3 | Engine block SHA-256 (text between `/* ENGINE:START` and `/* ENGINE:END */`, LF line endings) | `c5da9cfb54f8e716…` (canonical form, see `eval/out/eval_results.json`) in **all three**: live, `PolicyNest.html`, `site/index.html`. Engine string `policy-engine 3.4.0`. |
 | V4 | Is the evaluation pinned to that engine block? | **No.** `eval/out/eval_results.json` records the run time (2026-11-13T19:30Z) and the engine version string, but no hash of the code. Node is still not installed (`node: command not found`), so the evaluation could not be re-run. See RF-01. |
 | V5 | `GET https://policynest-copilot.embarko.app/api/health` | `{"ok": true, "llm": false, "model": "claude-opus-5-5"}`. The proxy is up with no key. |
 | V6 | `GET /kb.json` on the live site | `200`, 47,646 bytes, 55 chunks. **13 of the 55 chunks contain the word "fraud".** No chunk has an audience tag. |
@@ -54,7 +54,7 @@ Severity: **Critical** (privacy or compliance breach, or a wrong claim on a scor
 
 | ID | Finding | Sev | Sources | Evidence | Goal | Status |
 |---|---|---|---|---|---|---|
-| RF-01 | **The headline accuracy is not pinned to the code that runs.** The evaluation ran on 13 Nov at 19:30 UTC; the engine block has been edited since in the same file, and no hash was recorded, so "the same code the site runs" cannot be shown for today's build. | Critical | VER, EV, P2 (H4), CLAUDE.md ("engine SHA must match") | V3, V4 (verified). Node absent. | E2, §6 | Open |
+| RF-01 | **The headline accuracy is not pinned to the code that runs.** The evaluation ran on 13 Nov at 19:30 UTC; the engine block has been edited since in the same file, and no hash was recorded, so "the same code the site runs" cannot be shown for today's build. | Critical | VER, EV, P2 (H4), CLAUDE.md ("engine SHA must match") | V3, V4 (verified). Node absent. | E2, §6 | **Resolved 15 Nov** (step 0): re-run on today's code gave identical results for all 600; results now carry `engine_sha256`, which matches source, build and live |
 | RF-02 | **Another person's identity is pre-filled, and DPDP consent is pre-ticked.** The Compliance card then reports "Consent recorded". | Critical | CR R2, U2, U3, K14, F7 | V9 (verified) | A2, A11, §7 | Open |
 | RF-03 | **Autosave writes full PAN, full bank-account number, DOB, mobile and email to the device in plain text.** The plan promised parsed fields only and a masked account. On a shared phone the next user can read them. | High | VER (new), PL S3 | V8 (verified) | A13, D5, §7 | Open (new) |
 | RF-04 | **The Compliance checklist ticks items it never checks** ("Consent recorded", "Aadhaar kept as last four", and a simulated registry tick). | High | CR R14, K3 | V18 (verified) | E1, §7 | Open |

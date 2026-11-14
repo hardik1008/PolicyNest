@@ -2,6 +2,8 @@
 
 Engine: policy-engine 3.4.0 · rulebook v3.2 · OCR-read cross-checks · simulated external services · run 2026-11-13 19:30 UTC · 600 applications
 
+**Re-run on 15 Nov 2026 (IST; the runner records 2026-11-14T19:17Z):** re-run on the engine block that is live today, with Node 26.13.1. Every figure and all 600 predictions are identical to the 13 Nov run; only the run time and the timing figure differ. Results are now pinned to the code they scored: `engine_sha256` in `eval/out/eval_results.json` is `c5da9cfb54f8e716b9630a7075a9f25db04e47cc696061ee7136e98019bce367` (the block from `/* ENGINE:START` up to, not including, `/* ENGINE:END */`, LF line endings). It matches the source, the built page and the live site. Still in-sample.
+
 ## How it was measured
 
 - The engine block is taken directly from `policynest_mvp/PolicyNest.html`, between `ENGINE:START` and `ENGINE:END`, and run in Node. It is the same code the website runs.

@@ -110,7 +110,7 @@ Standing decisions restated here, not re-asked: G-17 (near-black on orange), G-2
 ### G-08 · Pinning the evaluation to the code
 - **Question:** Should every evaluation run record the SHA-256 of the engine block it scored, the Evaluation page show that hash beside the hash of the running page, and the build warn when they differ?
 - **ask-matt routing:** `/grilling`; the check itself is a `/tdd`-style behaviour test at the engine seam (G-38). Node install was already approved (Phase 3 Q7); installing it is a human step that ask-matt routes to `/wizard` (named by ask-matt, not invoked here).
-- **Answer:** Yes. Re-run the evaluation on today's engine (`bd41031462336892…`) as the first build step, before any engine-adjacent change.
+- **Answer:** Yes. Re-run the evaluation on today's engine (`c5da9cfb54f8e716…` (canonical form, see `eval/out/eval_results.json`)) as the first build step, before any engine-adjacent change.
 - **Rationale:** RF-01. CLAUDE.md: "the engine block's SHA-256 must match the live site's, or the evaluation must be re-run". Accuracy is 30% of the rubric.
 - **Confidence:** High. · **Findings:** RF-01, RF-45. · **ADR:** 0001.
 - **Status:** AI-answered — needs human confirmation.

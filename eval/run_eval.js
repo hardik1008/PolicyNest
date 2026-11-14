@@ -4,6 +4,9 @@ const fs=require('fs'),path=require('path'),Papa=require('papaparse');
 const [,,HTML,DS,OUT]=process.argv;
 const html=fs.readFileSync(HTML,'utf8');
 const block=html.slice(html.indexOf('/* ENGINE:START'),html.indexOf('/* ENGINE:END */'));
+/* ADR 0001: pin every result to the exact code it scored. SHA-256 of the block above (from the ENGINE:START
+   comment up to, not including, the ENGINE:END comment), with CRLF normalised to LF. */
+const ENGINE_SHA256=require('crypto').createHash('sha256').update(block.replace(/\r\n/g,'\n'),'utf8').digest('hex');
 const E=new Function(block+';return {parseDoc,decide,decisionOf,followupItems,nameTier};')();
 const csv=f=>Papa.parse(fs.readFileSync(path.join(DS,f),'utf8'),{header:true,skipEmptyLines:true}).data;
 const docs=csv('documents.csv'),truth=csv('application_truth.csv');
@@ -44,7 +47,7 @@ const rejCaught=rows.filter(r=>r.truth==='REJECT'&&(r.pred==='REJECT'||r.human))
 const wrongApprove=rows.filter(r=>r.pred==='APPROVE'&&r.truth!=='APPROVE');
 function group(key){const g={};rows.forEach(r=>{const k=r[key]||'(blank)';g[k]=g[k]||{n:0,ok:0};g[k].n++;if(r.truth===r.pred)g[k].ok++});return Object.fromEntries(Object.entries(g).sort((a,b)=>b[1].n-a[1].n).map(([k,v])=>[k,{n:v.n,accuracy:+(v.ok/v.n).toFixed(4)}]))}
 const nmi=rows.filter(r=>r.engine==='NEEDS_MORE_INFO');
-const res={run_at:new Date().toISOString(),engine:(html.match(/var ENGINE="([^"]+)"/)||[])[1],n,accuracy:acc,engine_ms_per_application:ms/n,confusion_rows_truth_cols_pred:cm,REJECT:pr('REJECT'),NEEDS_MORE_INFO:pr('NEEDS_MORE_INFO'),APPROVE:pr('APPROVE'),
+const res={run_at:new Date().toISOString(),engine:(html.match(/var ENGINE="([^"]+)"/)||[])[1],engine_sha256:ENGINE_SHA256,n,accuracy:acc,engine_ms_per_application:ms/n,confusion_rows_truth_cols_pred:cm,REJECT:pr('REJECT'),NEEDS_MORE_INFO:pr('NEEDS_MORE_INFO'),APPROVE:pr('APPROVE'),
   reject_recall_incl_routed_to_human:rejCaught,straight_through_rate:stp,routed_to_human:rows.filter(r=>r.human).length,
   wrongful_approvals:wrongApprove.length,follow_up:{applications:nmi.length,messages_per_application:nmi.length?nmi.reduce((s,r)=>s+r.followup_messages,0)/nmi.length:null,mean_items:nmi.length?nmi.reduce((s,r)=>s+r.followup_items,0)/nmi.length:null},
   by_gender:group('gender'),by_state:group('state'),by_name_pattern:group('name_cat')};

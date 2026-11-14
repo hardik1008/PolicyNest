@@ -334,7 +334,7 @@ Each requirement has acceptance criteria (checked on the live site after deploy 
 | ID | Requirement | Acceptance criteria | Sources | Status · Phase |
 |---|---|---|---|---|
 | FR-57 | Every evaluation run records the engine-block SHA-256; the Evaluation page shows that hash and the running page's hash and says whether they match; the build warns on a mismatch. | Page shows two hashes and "match"; editing one character in the engine block makes the build warn. | ADR 0001; RF-01; G-08 | N · P1-W3, P2-L5 |
-| FR-58 | The evaluation is re-run on today's engine before any other build change; if it differs from the stored outputs, the report and PRODUCT are updated before anything else. | Re-run outputs stored with the hash `bd41031462336892…` (full value in the output); difference report, if any. | RF-01; RF-45; G-08 | N · P0 |
+| FR-58 | The evaluation is re-run on today's engine before any other build change; if it differs from the stored outputs, the report and PRODUCT are updated before anything else. | Re-run outputs stored with the hash `c5da9cfb54f8e716…` (canonical form, see `eval/out/eval_results.json`) (full value in the output); difference report, if any. | RF-01; RF-45; G-08 | N · P0 |
 | FR-59 | The Evaluation page: headline tiles say "in-sample"; the confusion matrix shows routed-to-a-person counts; the fairness chip says "no gap in-sample"; the 60.7% "approved first time" row is shown; the simulation says "directional" and why it differs from the package slides; the 0.38 reviewer minutes say "simulated estimate". | Visual check of each item. | RF-45; RF-46; RF-48; CX-12; G-33 | N · P2-L5 |
 | FR-60 | A held-out set of about 30–40 constructed cases, labelled by the user and hashed before any engine run, covering face 0.60–0.75, surname change, unlisted board, a dispute and two selfie failures; a separate report section "held-out, team-made, n = …". | Labels hash recorded before the run; results reported apart from in-sample figures. | Q8; RF-47; G-34 | G (user labels) · P4 |
 | FR-61 | The Stage 1 process map (steps, entering, lost, median and P90 time) from the data pack is shown on the Evaluation page with its source and "elapsed clock hours". | Step table matches the Stage 1 pack's figures. | Brief Stage 1; Q16; RF-57 | N · P2-L5 |
@@ -641,7 +641,7 @@ The two targets interact: 60% straight-through and under 5 reviewer minutes hold
 |---|---|
 | Owned files | `.gitignore`; `eval/run_eval.js` (hash output only); `tests/e2e/**` (new); `PolicyNest.html` (**region markers only**, comments, no code change) |
 | Depends on | Gate 0; the user's OK for `git init`, Node (Q7) and optionally Playwright |
-| Inputs | This PRD §11, §16.3; current engine hash `bd41031462336892…` |
+| Inputs | This PRD §11, §16.3; current engine hash `c5da9cfb54f8e716…` (canonical form, see `eval/out/eval_results.json`) |
 | Steps | 1. `git init` with the ignore list (FR-67). 2. Install Node LTS (`winget`). 3. Re-run the evaluation to a scratch folder and compare with `eval/out` (FR-58); record the full hash in the output. 4. Add region markers. 5. Write the T1–T10 browser harness (seam 2). |
 | Outputs | A repository with a baseline commit; evaluation outputs with the hash; a green T1–T10 baseline |
 | Definition of done | The engine hash is unchanged by the markers; the evaluation matches or the difference is reported; T1–T10 green locally |
@@ -764,7 +764,7 @@ flowchart LR
 ## 18. Further notes
 
 - **Every decision in this PRD is AI-answered.** The GRILL_LOG lists who should confirm what; the five at the top of §14 matter most.
-- **Engine hash today:** `bd41031462336892…` (first 16 hex characters), identical on the live site, the source and the built page on 14 Nov 2026. The full hash is recorded in P0.
+- **Engine hash (canonical):** `c5da9cfb54f8e716b9630a7075a9f25db04e47cc696061ee7136e98019bce367`: SHA-256 of the block from `/* ENGINE:START` up to, not including, `/* ENGINE:END */`, LF line endings. Recorded by the evaluation runner since 15 Nov (step 0), and identical on the live site, the source and the built page. (The value `bd41…` quoted on 14 Nov hashed the block including the end marker; same code, different convention.)
 - **PRODUCT.md was not edited by this session.** P1-W4 does that, against the stale lines listed in RECONCILED_FINDINGS (RF-69, RF-74, RF-75).
 - **The critical review's live observations predate the S1–S5 deploy** (RF-76). This PRD uses this session's checks wherever the two differ.
 - **ask-matt also names `/to-tickets`, `/implement-spec` and `/to-questionnaire`.** They are not installed in this environment, so the roadmap spells out their steps to be followed by hand. `/research` and `/wizard` are installed but were not invoked in this session.
