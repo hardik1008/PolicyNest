@@ -1,0 +1,62 @@
+"""Static check pack (PRD §16.2 items 1, 2, 7 plus a JS syntax check).
+
+Run from the project root:  python tools/check_pack.py
+Exit code 0 = all pass. Prints one line per check.
+"""
+import hashlib, os, re, subprocess, sys, tempfile
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SRC = os.path.join(ROOT, "policynest_mvp", "PolicyNest.html")
+PINNED = "c5da9cfb54f8e716b9630a7075a9f25db04e47cc696061ee7136e98019bce367"
+
+# FR-36 and RB §8: phrases that must not appear anywhere in the app source.
+BANNED = [
+    "About 2 minutes",
+    "Many agents pass on their second try",
+    "reply to this message",
+]
+
+def main():
+    ok = True
+    html = open(SRC, encoding="utf-8").read()
+
+    # 1. Engine hash (ADR 0001): from "/* ENGINE:START" up to, not including, "/* ENGINE:END */", CRLF -> LF.
+    a, b = html.find("/* ENGINE:START"), html.find("/* ENGINE:END */")
+    block = html[a:b].replace("\r\n", "\n")
+    h = hashlib.sha256(block.encode("utf-8")).hexdigest()
+    same = h == PINNED
+    print(("PASS" if same else "FAIL") + " engine hash " + h[:16] + ("" if same else " (pinned " + PINNED[:16] + "; the engine block changed: re-run the evaluation)"))
+    ok &= same
+
+    # 2. JS syntax: every inline <script> block must parse.
+    scripts = re.findall(r"<script>(.*?)</script>", html, flags=re.S)
+    bad = 0
+    for i, s in enumerate(scripts):
+        with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False, encoding="utf-8") as t:
+            t.write(s)
+            p = t.name
+        r = subprocess.run(["node", "--check", p], capture_output=True, text=True)
+        os.unlink(p)
+        if r.returncode:
+            bad += 1
+            print("FAIL js syntax in script " + str(i) + ": " + (r.stderr.strip().splitlines() or [""])[-1][:200])
+            print("     " + "\n     ".join(r.stderr.strip().splitlines()[:4]))
+    if not bad:
+        print("PASS js syntax (" + str(len(scripts)) + " script blocks)")
+    ok &= bad == 0
+
+    # 3. Banned phrases (FR-36).
+    hits = [p for p in BANNED if p.lower() in html.lower()]
+    print(("PASS" if not hits else "FAIL") + " banned phrases" + ("" if not hits else ": " + "; ".join(hits)))
+    ok &= not hits
+
+    # 4. Build (key check, kb build).
+    r = subprocess.run([sys.executable, os.path.join(ROOT, "policynest_mvp", "build_site.py")], capture_output=True, text=True, cwd=ROOT)
+    print(("PASS" if r.returncode == 0 else "FAIL") + " build_site.py" + ("" if r.returncode == 0 else ": " + (r.stderr or r.stdout).strip()[-300:]))
+    ok &= r.returncode == 0
+
+    print("ALL PASS" if ok else "SOME CHECKS FAILED")
+    sys.exit(0 if ok else 1)
+
+if __name__ == "__main__":
+    main()
