@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-11-14T19:40:38+00:00",
+  "generated_at": "2026-11-14T19:17:06.338Z",
   "engine_sha256": "c5da9cfb54f8e716b9630a7075a9f25db04e47cc696061ee7136e98019bce367",
-  "note": "Seeded reviewer queue for the Review console (FR-62). 11 cases are test-set applications the engine routes to a person; 5 are constructed (fictional names, every value marked constructed). Ages are simulated and deterministic. The AI recommendation is the engine output; dataset truth labels are deliberately not included. Aadhaar and PAN numbers are omitted.",
+  "note": "Seeded reviewer queue for the Review console (FR-62). 11 cases are test-set applications the engine routes to a person. All 11 engine-routed test-set cases are different-person name cases (NAME_MISMATCH); APP-26016 also carries DOB_MISMATCH and APP-26115 also carries BANK_NAME_MISMATCH. The other Human-only kinds exist only as constructed cases because the test set has none. Each constructed case is flagged constructed: true and lists its made-up fields in constructed_fields; constructed values are not evidence. Constructed cases were not run through the engine. Ages are simulated and deterministic. The AI recommendation for test-set cases is the engine output; dataset truth labels are deliberately not included. Aadhaar and PAN numbers are omitted.",
   "cases": [
     {
       "id": "APP-26016",
@@ -53,11 +53,11 @@
       "where_unsure": [
         {
           "check": "DOB_MISMATCH",
-          "reason": "engine check not passed"
+          "reason": "date of birth on AADHAAR_FRONT differs from the PAN date of birth"
         },
         {
           "check": "NAME_MISMATCH",
-          "reason": "engine check not passed"
+          "reason": "name on CLASS10_MARKSHEET, CANCELLED_CHEQUE differs from the PAN name beyond the rulebook's tiers"
         }
       ],
       "age_hours": 10,
@@ -113,11 +113,11 @@
       "where_unsure": [
         {
           "check": "NAME_MISMATCH",
-          "reason": "engine check not passed"
+          "reason": "name on CLASS10_MARKSHEET, CANCELLED_CHEQUE differs from the PAN name beyond the rulebook's tiers"
         },
         {
           "check": "BANK_NAME_MISMATCH",
-          "reason": "engine check not passed"
+          "reason": "account-holder name on CANCELLED_CHEQUE does not match the PAN name"
         }
       ],
       "age_hours": 33,
@@ -172,7 +172,7 @@
       "where_unsure": [
         {
           "check": "NAME_MISMATCH",
-          "reason": "engine check not passed"
+          "reason": "name on CLASS10_MARKSHEET, CANCELLED_CHEQUE differs from the PAN name beyond the rulebook's tiers"
         }
       ],
       "age_hours": 8,
@@ -227,7 +227,7 @@
       "where_unsure": [
         {
           "check": "NAME_MISMATCH",
-          "reason": "engine check not passed"
+          "reason": "name on CLASS10_MARKSHEET, CANCELLED_CHEQUE differs from the PAN name beyond the rulebook's tiers"
         }
       ],
       "age_hours": 6,
@@ -282,7 +282,7 @@
       "where_unsure": [
         {
           "check": "NAME_MISMATCH",
-          "reason": "engine check not passed"
+          "reason": "name on CLASS10_MARKSHEET differs from the PAN name beyond the rulebook's tiers"
         }
       ],
       "age_hours": 86,
@@ -337,7 +337,7 @@
       "where_unsure": [
         {
           "check": "NAME_MISMATCH",
-          "reason": "engine check not passed"
+          "reason": "name on CLASS10_MARKSHEET differs from the PAN name beyond the rulebook's tiers"
         }
       ],
       "age_hours": 29,
@@ -392,7 +392,7 @@
       "where_unsure": [
         {
           "check": "NAME_MISMATCH",
-          "reason": "engine check not passed"
+          "reason": "name on CLASS10_MARKSHEET, CANCELLED_CHEQUE differs from the PAN name beyond the rulebook's tiers"
         }
       ],
       "age_hours": 61,
@@ -447,7 +447,7 @@
       "where_unsure": [
         {
           "check": "NAME_MISMATCH",
-          "reason": "engine check not passed"
+          "reason": "name on CLASS10_MARKSHEET, CANCELLED_CHEQUE differs from the PAN name beyond the rulebook's tiers"
         }
       ],
       "age_hours": 45,
@@ -502,7 +502,7 @@
       "where_unsure": [
         {
           "check": "NAME_MISMATCH",
-          "reason": "engine check not passed"
+          "reason": "name on CLASS10_MARKSHEET, CANCELLED_CHEQUE differs from the PAN name beyond the rulebook's tiers"
         }
       ],
       "age_hours": 89,
@@ -557,7 +557,7 @@
       "where_unsure": [
         {
           "check": "NAME_MISMATCH",
-          "reason": "engine check not passed"
+          "reason": "name on CLASS10_MARKSHEET differs from the PAN name beyond the rulebook's tiers"
         }
       ],
       "age_hours": 90,
@@ -612,7 +612,7 @@
       "where_unsure": [
         {
           "check": "NAME_MISMATCH",
-          "reason": "engine check not passed"
+          "reason": "name on CLASS10_MARKSHEET differs from the PAN name beyond the rulebook's tiers"
         }
       ],
       "age_hours": 93,
@@ -623,7 +623,7 @@
       "why_routed": "Face match 0.68, inside the 0.60 to 0.75 band (rulebook s.4.6 and s.9: a person compares the photos)",
       "ai_recommendation": "No automatic outcome; route to reviewer",
       "codes": [
-        "FACE_MATCH_REVIEW"
+        "FACE_MATCH_BORDERLINE"
       ],
       "name_on_pan": "ASHA TESTCASE RAO",
       "names_on_other_documents": {
@@ -632,14 +632,20 @@
       "face_match_score": 0.68,
       "where_unsure": [
         {
-          "check": "FACE_MATCH_REVIEW",
+          "check": "FACE_MATCH_BORDERLINE",
           "reason": "score 0.68 in the 0.60 to 0.75 band"
         }
+      ],
+      "constructed_fields": [
+        "ai_recommendation",
+        "name_on_pan",
+        "names_on_other_documents",
+        "face_match_score"
       ],
       "kind": "constructed case",
       "constructed": true,
       "values_marked": "constructed",
-      "source": "constructed for the review console; not from the test set",
+      "source": "constructed for the review console; not from the test set; not run through the engine",
       "engine_decision": null,
       "documents": null,
       "state_declared": null,
@@ -664,10 +670,16 @@
           "reason": "surname differs between PAN and marksheet (name tier 6, Human only)"
         }
       ],
+      "constructed_fields": [
+        "ai_recommendation",
+        "name_on_pan",
+        "names_on_other_documents",
+        "face_match_score"
+      ],
       "kind": "constructed case",
       "constructed": true,
       "values_marked": "constructed",
-      "source": "constructed for the review console; not from the test set",
+      "source": "constructed for the review console; not from the test set; not run through the engine",
       "engine_decision": null,
       "documents": null,
       "state_declared": null,
@@ -679,7 +691,7 @@
       "why_routed": "Class 10 board not on the recognised list (rulebook s.4.4 and s.9: Human only)",
       "ai_recommendation": "No automatic outcome; route to reviewer",
       "codes": [
-        "BOARD_NOT_RECOGNISED"
+        "BOARD_UNLISTED"
       ],
       "name_on_pan": "MEERA TESTFIELD DAS",
       "names_on_other_documents": {
@@ -689,14 +701,21 @@
       "face_match_score": 0.9,
       "where_unsure": [
         {
-          "check": "BOARD_NOT_RECOGNISED",
+          "check": "BOARD_UNLISTED",
           "reason": "board not on the recognised list"
         }
+      ],
+      "constructed_fields": [
+        "ai_recommendation",
+        "name_on_pan",
+        "names_on_other_documents",
+        "board_read",
+        "face_match_score"
       ],
       "kind": "constructed case",
       "constructed": true,
       "values_marked": "constructed",
-      "source": "constructed for the review console; not from the test set",
+      "source": "constructed for the review console; not from the test set; not run through the engine",
       "engine_decision": null,
       "documents": null,
       "state_declared": null,
@@ -723,10 +742,18 @@
           "reason": "applicant disputes the holder-type reading"
         }
       ],
+      "constructed_fields": [
+        "ai_recommendation",
+        "name_on_pan",
+        "names_on_other_documents",
+        "pan_holder_type_read",
+        "face_match_score",
+        "applicant_dispute"
+      ],
       "kind": "constructed case",
       "constructed": true,
       "values_marked": "constructed",
-      "source": "constructed for the review console; not from the test set",
+      "source": "constructed for the review console; not from the test set; not run through the engine",
       "engine_decision": null,
       "documents": null,
       "state_declared": null,
@@ -741,6 +768,7 @@
         "FACE_MATCH_LOW",
         "FACE_MATCH_LOW_REPEAT"
       ],
+      "code_note": "queue-only code; the repeat-failure rule (rulebook s.4.6) is counted outside the engine",
       "name_on_pan": "TARUN SAMPLEKUMAR GHOSH",
       "names_on_other_documents": {
         "AADHAAR_FRONT": "TARUN SAMPLEKUMAR GHOSH"
@@ -751,14 +779,24 @@
       ],
       "where_unsure": [
         {
+          "check": "FACE_MATCH_LOW",
+          "reason": "selfie score below 0.60"
+        },
+        {
           "check": "FACE_MATCH_LOW_REPEAT",
-          "reason": "two consecutive selfie scores below 0.60"
+          "reason": "two consecutive selfie scores below 0.60 (counted outside the engine)"
         }
+      ],
+      "constructed_fields": [
+        "ai_recommendation",
+        "name_on_pan",
+        "names_on_other_documents",
+        "face_match_scores"
       ],
       "kind": "constructed case",
       "constructed": true,
       "values_marked": "constructed",
-      "source": "constructed for the review console; not from the test set",
+      "source": "constructed for the review console; not from the test set; not run through the engine",
       "engine_decision": null,
       "documents": null,
       "state_declared": null,
