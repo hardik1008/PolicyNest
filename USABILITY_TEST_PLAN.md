@@ -1,8 +1,8 @@
 # PolicyNest usability test plan
 
-Status: **plan only. No sessions have been run, and no result below is a measurement.** Written 14 Nov 2026 with the `usability-test-plan` skill, for PRODUCT.md §8 priority 1 and brief Stage 3 (five people playing applicants, two playing reviewers).
+Status: **plan only. No sessions have been run, and no result below is a measurement.** Written 14 Nov 2026 with the `usability-test-plan` skill, for PRODUCT.md §8 priority 1 and brief Stage 3 (five people playing applicants, two playing reviewers). Stale lines fixed 15 Nov 2026 (RF-75).
 
-Product under test: https://policynest.embarko.app (the live site, exam pass mark 40%).
+Product under test: https://policynest.embarko.app (the live site, exam pass mark 50%, a demo rule).
 
 ## 1. Objectives and research questions
 
@@ -22,7 +22,7 @@ The brief needs two numbers it cannot get from data: **applicant clarity (target
 - **Participants play roles.** They are not real applicants, so the results are directional evidence, not a forecast. Say so in the report.
 - **No real people's documents, ever** (brief §8). Two routes, both synthetic:
   - the app's **"Use specimen"** path, which builds document text from typed details and skips the camera;
-  - a **synthetic image pack** (a made-up person's six documents, with a blurry marksheet and a parent's cheque variant), shown on a screen or printed and photographed. This exercises the real upload slots and the OCR on phone photos, which also feeds PRODUCT.md gap D6. **The pack does not exist yet** (see §9).
+  - a **synthetic image pack** (a made-up person's five documents, with a blurry marksheet and a parent's cheque variant; no selfie is included), shown on a screen or printed and photographed. This exercises the real upload slots and the OCR on phone photos, which also feeds PRODUCT.md gap D6. **The pack exists** in `usability/image_pack/`; it is not printed yet (see §9).
 
 ## 3. Participants
 
@@ -44,13 +44,13 @@ Each task is read aloud as a scenario. The moderator does not name buttons.
 | # | Scenario read to the participant | Variant to set | Success criterion | Target time |
 |---|---|---|---|---|
 | A1 | "You want to become an insurance agent. Open the link and enter your details." | Pre-filled sample details | Details saved without help; consent noticed | 3 min |
-| A2 | "Upload your documents. Here are the six papers of your character *Rahul*." | Image pack (clean) or "Use specimen" | All six slots verified; each file in the correct slot | 5 min |
+| A2 | "Upload your documents. Here are the five papers of your character *Rahul*." | Image pack (clean) or "Use specimen" | All six slots verified (the selfie slot uses "Use specimen"); each file in the correct slot | 5 min |
 | A3 | "Finish everything until you are certified." (T1) | Clean | Reaches the certificate unaided, including training and exam | 6 min |
 | A4 | "The company has sent you a message. Read it and tell me what you need to do." (T5, then T10) | PAN clean; marksheet **Blurry, DOB unreadable · T5**; bank **Parent's account · T5** | Says both fixes unprompted; fixes both in one go; sees the result after re-upload | 7 min |
 | A5 | "Your name is spelt differently on two papers. What does the message ask?" (T3) | Marksheet **Spelling variant · T3** | States "send a corrected document or a signed declaration" | 4 min |
 | A6 | "The company says you cannot register. Why, and what can you do?" (T6) | PAN **Company PAN · T6** | Explains the reason in own words; finds the Dispute option | 4 min |
 
-Order: A1 to A3 first (clean flow), then A4 to A6 in a **rotated order** across participants so no single message is always read last. For participants who prefer Hindi, repeat the A4 message in Hindi with the English / Hindi switch and ask for a second rating.
+Order: A1 to A3 first (clean flow), then A4 to A6 in a **rotated order** across participants so no single message is always read last. For participants who prefer Hindi, repeat the A4 message in Hindi with the English / Hindi switch and ask for a second rating. Wording B of the follow-up is not in the app: it is on a printed card, rated the same way, and the engine does not change for it (`planning/PHASE2_SPEC_AND_AUDIT.md`, Q10).
 
 **Optional stretch task (A2b):** photograph a printed synthetic card with the phone camera and upload it. Record whether OCR accepts it and how long the participant takes. This is the only way this study produces real phone-photo evidence.
 
@@ -70,7 +70,7 @@ The console holds one application at a time. Before each task the moderator sets
 
 | Metric | How | Pass line | Source of the line |
 |---|---|---|---|
-| **Clarity score** | Participant rates each follow-up and rejection message "How clear was what you had to do?" 1 to 5 | Mean ≥ 4.0 | Brief Table 7 |
+| **Clarity score** | Participant rates each follow-up and rejection message "How clear was what you had to do?" 1 to 5 | Mean ≥ 4.0 in each language; English and Hindi scored separately (`planning/PHASE2_SPEC_AND_AUDIT.md`, Q19) | Brief Table 7 |
 | **Comprehension check** | Participant states the fix(es) in their own words; scored right / partly / wrong | ≥ 4 of 5 right on A4 | Proposed |
 | Task success | Done unaided / done with a hint / failed, per task | ≥ 4 of 5 unaided on A3 | Proposed |
 | Time on task | Stopwatch from scenario end to participant's "done" | Within the target times above | Proposed |
@@ -105,7 +105,8 @@ Lines marked "Proposed" are my suggestions, not from the brief; change them free
 ## 7. Data collection
 
 - **Record:** screen (with consent), the timer, and the ratings sheet. For reviewers also record the evidence panel they looked at first.
-- **Observation sheet**, one row per event, kept in a shared sheet:
+- **Results** go to `planning/usability/results.csv` with participant codes P1 to P5 and R1 to R2 only: no names, phone numbers or documents, and no online form (`planning/PHASE2_SPEC_AND_AUDIT.md`, Q20).
+- **Observation sheet**, one row per event, kept with the results (codes only, never names):
 
 | Participant | Task | Time (mm:ss) | Hint level | Observation | Quote | Severity | Screen / element |
 |---|---|---|---|---|---|---|---|
@@ -129,12 +130,12 @@ Lines marked "Proposed" are my suggestions, not from the brief; change them free
 
 **Preparation**
 - [ ] Site loads on one Android phone and one iPhone on mobile data, and the console is clean (no errors).
-- [ ] The **synthetic image pack is made**: six clean documents for one made-up person, plus a blurry marksheet and a parent's cheque. *Not done yet.*
+- [x] The **synthetic image pack is made** in `usability/image_pack/`: five clean documents for one made-up person, plus a blurry marksheet and a parent's cheque. No selfie is in the pack, by design (use "Use specimen"). Not printed yet; the layouts still need a check (RF-79).
 - [ ] Printed copies (for the optional photo task), or a second screen to photograph.
 - [ ] Hindi renders correctly on both phones (Devanagari text, no boxes).
 - [ ] The English / Hindi switch on the follow-up works on the phone.
-- [ ] The exam passes at 40% and fails at 20%.
-- [ ] A page refresh gives a clean new application (state is not kept), so reset between participants.
+- [ ] The exam passes at 50% (a demo rule) and fails below it.
+- [ ] State is kept only with the applicant's consent (autosave, box `#f-save`). A page refresh restores a saved application, so reset between participants: clear the saved key `pn-onboarding-v1` in the browser, or use a private window.
 - [ ] For reviewer tasks: you can set up T4, T8 and a disputed T6 in under 2 minutes each.
 
 **Dry run with one colleague** (not a participant)

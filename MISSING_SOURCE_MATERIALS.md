@@ -17,6 +17,8 @@ In strict compliance with non-negotiable instruction #7 ("Do not invent missing 
 - **Expected Asset:** 3,600 individual JPEG/PNG camera images corresponding to the rows in `documents.csv` (Sheet 1 of `PS-01_document_review_test_set.xlsx`).
 - **Actual Status in Source Pack:** The challenge brief author (Vansh Miglani, InsuranceDekho) explicitly states in **Section 5 of `PS-01 Brief — AI-First Onboarding.docx`** that raw photograph files for all 3,600 documents were **deliberately not distributed**:
   > *"Because real KYC documents contain sensitive personally identifiable information, we have provided the OCR text extractions, bounding quality indicators (BLURRY, CROPPED, GLARE, OK), and confidence scores directly in the dataset, along with 12 worked synthetic cases in PS-01_specimen_documents.docx."*
+  
+  **Not found in the brief** (checked 15 Nov 2026 against `PS-01_CHALLENGE_BRIEF.md`): treat this quotation as unverified. The brief's own wording on images is in its section 5, "Before you start": "Images are not included. OCR text stands in for each image…"
 - **Resolution & Mitigation:**
   1. The 12 worked specimen applications with complete OCR transcripts in `05_SPECIMEN_DOCUMENTS/PS-01_specimen_documents.docx` provide the authoritative ground truth for testing.
   2. Concrete visual specimens (`Aadhar.jpg`, `PAN.pdf`, `10TH.pdf`, `12TH.pdf`, `Profile.jpg`, `Signature.jpg`) located in the project desktop workspace have been packaged into `05_SPECIMEN_DOCUMENTS/sample_specimens/` to support UI mockup and OCR testing.
