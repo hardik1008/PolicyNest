@@ -65,8 +65,35 @@ for rel, label in CORPUS:
         else:
             buf.append(line)
     flush()
-(site / "kb.json").write_text(json.dumps(chunks, ensure_ascii=False), encoding="utf-8")
-print("KB:", len(chunks), "chunks")
+# Applicants must never see fraud wording (rulebook §8, ADR 0002). Internal sentences and table rows
+# (fraud-desk handling) are removed; a passage left too short is dropped. Only applicant-safe passages ship,
+# to the site (offline rulebook answers) and to the proxy (which runs its own retrieval).
+BANNED = re.compile(r"\b(fraud\w*|fake|forged|forgery|tamper\w*|suspicious)\b", re.I)
+def applicant_text(text):
+    out = []
+    for line in text.splitlines():
+        if not BANNED.search(line):
+            out.append(line)
+        elif not line.lstrip().startswith("|"):  # prose or list item: drop only the sentences that carry the term
+            kept = [s for s in re.split(r"(?<=[.!?])\s+", line) if not BANNED.search(s)]
+            if kept and re.sub(r"[\s\-*>#|:]", "", " ".join(kept)):
+                out.append(" ".join(kept))
+        # a table row with the term is dropped whole
+    return "\n".join(out).strip()
+safe, redacted = [], 0
+for c in chunks:
+    t = applicant_text(c["text"])
+    if t != c["text"]:
+        redacted += 1
+    if len(t) > 40 and not BANNED.search(c["head"]):
+        safe.append(dict(c, id=len(safe), text=t, audience="applicant"))
+for c in safe:
+    if BANNED.search(c["text"]) or BANNED.search(c["head"]):
+        raise SystemExit(f"Refusing to build: banned wording left in passage {c['cite']}")
+kb = json.dumps(safe, ensure_ascii=False)
+(site / "kb.json").write_text(kb, encoding="utf-8")
+(here / "copilot_api" / "kb.json").write_text(kb, encoding="utf-8")
+print("KB:", len(safe), "applicant passages from", len(chunks), "chunks;", redacted, "had internal wording removed")
 
 # Secrets never ship: the Copilot key lives only in .env / the proxy app's env vars.
 env = root / ".env"

@@ -1,14 +1,18 @@
 """PolicyNest Onboarding Copilot proxy.
 
 A tiny HTTP server that holds the Anthropic API key (env var ANTHROPIC_API_KEY) so the
-browser never sees it. The static site POSTs {question, context, passages, history} to
-/api/copilot; this adds the system prompt and guardrails and calls Claude.
+browser never sees it. The static site POSTs {question, context, history} to /api/copilot.
+This server looks up the rulebook passages itself (BM25 over the applicant-safe kb.json that
+build_site.py writes next to this file), checks the context against a fixed schema, refuses
+ID numbers, calls Claude and filters the answer (ADR 0002). Passages sent by a browser are ignored.
 
 Deployed as its own Embarko server app (static sites cannot hold env vars).
 Run locally:  ANTHROPIC_API_KEY=... python main.py   (reads PORT, default 8787)
 """
 import json
+import math
 import os
+import re
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -96,31 +100,153 @@ def _key_ok():
     return bool(k) and not k.startswith("your-")
 
 
-def ask(body):
-    import anthropic  # imported lazily so /health works without the SDK
-    passages = body.get("passages") or []
-    ptext = "\n\n".join(
-        f"[{p.get('cite', p.get('src', '?'))}]\n{str(p.get('text', ''))[:2400]}" for p in passages[:6])
-    state = json.dumps(body.get("context") or {}, ensure_ascii=False)[:6000]
+# ---------- Retrieval: the same BM25 the browser uses, over applicant-safe passages only ----------
+_STOP = set("the and for are you your is of to in on a an it be or my me i we do does what how why can this that with not".split())
+
+
+def tokens(s):
+    s = re.sub(r"[^a-z0-9ऀ-ॿ ]+", " ", str(s).lower())
+    return [w for w in s.split() if len(w) > 1 and w not in _STOP]
+
+
+def load_kb(path=_here.parent / "kb.json"):
+    try:
+        kb = [c for c in json.loads(Path(path).read_text(encoding="utf-8")) if c.get("audience") == "applicant"]
+    except (OSError, ValueError):
+        kb = []
+    df = {}
+    for c in kb:
+        c["_tk"] = tokens(c["head"] + " " + c["head"] + " " + c["text"])
+        for t in set(c["_tk"]):
+            df[t] = df.get(t, 0) + 1
+    n = len(kb)
+    idf = {t: math.log(1 + (n - d + .5) / (d + .5)) for t, d in df.items()}
+    avg = sum(len(c["_tk"]) for c in kb) / max(1, n)
+    return {"chunks": kb, "idf": idf, "avg": avg}
+
+
+KB = load_kb()
+
+
+def retrieve(q, n=5, kb=None):
+    kb = kb or KB
+    qt, k1, b, out = tokens(q), 1.4, .75, []
+    for c in kb["chunks"]:
+        tf = {}
+        for t in c["_tk"]:
+            tf[t] = tf.get(t, 0) + 1
+        s = sum(kb["idf"].get(t, 0) * tf[t] * (k1 + 1) / (tf[t] + k1 * (1 - b + b * len(c["_tk"]) / kb["avg"]))
+                for t in qt if t in tf)
+        if s > 0:
+            out.append((s, c))
+    return [c for s, c in sorted(out, key=lambda x: -x[0])[:n]]
+
+
+# ---------- Input checks ----------
+ID_NUMBER = re.compile(r"\b\d{4}\s?\d{4}\s?\d{4}\b|\b[A-Za-z]{5}\d{4}[A-Za-z]\b|\b\d{9,18}\b")
+CODE = re.compile(r"^[A-Za-z0-9_:\- ]{1,40}$")
+
+
+def _s(v, n):
+    return str(v)[:n] if isinstance(v, (str, int, float)) and not isinstance(v, bool) else None
+
+
+def _i(v):
+    return int(v) if isinstance(v, (int, float)) and not isinstance(v, bool) else None
+
+
+def clean_context(ctx):
+    """Keep only the fields the page sends (copilotContext in PolicyNest.html), with types and lengths
+    checked. Anything else is dropped, so a caller cannot smuggle free text into the prompt."""
+    ctx = ctx if isinstance(ctx, dict) else {}
+    out = {"first_name": re.sub(r"[^A-Za-zऀ-ॿ .'-]", "", _s(ctx.get("first_name"), 40) or "") or None}
+    for k, n in (("stage", 40), ("details_page", 60), ("application_status", 40), ("decision", 40),
+                 ("suggested_next_step", 300)):
+        out[k] = _s(ctx.get(k), n)
+    for k in ("minutes_left_in_sitting", "sittings", "round", "exam_score"):
+        out[k] = _i(ctx.get(k))
+    th = ctx.get("training_hours")
+    out["training_hours"] = th if isinstance(th, (int, float)) and not isinstance(th, bool) else None
+    docs = []
+    for d in (ctx.get("documents") or [])[:6] if isinstance(ctx.get("documents"), list) else []:
+        if isinstance(d, dict):
+            docs.append({"document": _s(d.get("document"), 40), "status": _s(d.get("status"), 20),
+                         "refusal_reason": _s(d.get("refusal_reason"), 200),
+                         "open_issues": [x for x in (d.get("open_issues") or [])[:8]
+                                         if isinstance(x, str) and CODE.match(x)]})
+    out["documents"] = docs
+    fu = ctx.get("follow_up_items") if isinstance(ctx.get("follow_up_items"), list) else []
+    out["follow_up_items"] = [{"document": _s(i.get("document"), 40), "issue": _s(i.get("issue"), 40)}
+                              for i in fu[:10] if isinstance(i, dict)]
+    fe = ctx.get("field_errors") if isinstance(ctx.get("field_errors"), list) else []
+    out["field_errors"] = [x for x in fe[:12] if isinstance(x, str) and CODE.match(x)]
+    return out
+
+
+def clean_history(hist):
     msgs = []
-    for turn in (body.get("history") or [])[-6:]:
-        if turn.get("role") in ("user", "assistant") and turn.get("text"):
-            msgs.append({"role": turn["role"], "content": str(turn["text"])[:1500]})
+    for turn in (hist if isinstance(hist, list) else [])[-6:]:
+        if isinstance(turn, dict) and turn.get("role") in ("user", "assistant") and isinstance(turn.get("text"), str):
+            msgs.append({"role": turn["role"], "content": turn["text"][:800]})
     while msgs and msgs[0]["role"] != "user":
         msgs.pop(0)
     if msgs and msgs[-1]["role"] == "user":
         msgs.pop()
+    return msgs
+
+
+def has_id_number(body):
+    texts = [str(body.get("question", ""))] + [t.get("text", "") for t in (body.get("history") or [])
+                                              if isinstance(t, dict) and t.get("role") == "user"]
+    ctx = body.get("context") if isinstance(body.get("context"), dict) else {}
+    texts += [str(ctx.get("suggested_next_step", ""))] + [str(d.get("refusal_reason", "")) for d in
+                                                         (ctx.get("documents") or []) if isinstance(d, dict)]
+    return any(ID_NUMBER.search(str(t)) for t in texts)
+
+
+# ---------- Output filter (the page has the same one; this is the second line) ----------
+BANNED_OUT = re.compile(r"\b(fraud\w*|fake|forged|tamper\w*|suspicious)\b|\byou (are|have been) (approved|rejected)\b", re.I)
+SAFE = ("I can't say how your application will be decided; the verification checks and our team do that. "
+        "Ask me about your documents, the steps, or what to fix next.")
+REFUSED = "I can't help with that one. Ask me about your documents, the steps, or what to fix next."
+
+
+def build_request(body):
+    """Pure: the model request and the citations, from the request body. Passages from the body are ignored."""
+    ctx = clean_context(body.get("context"))
     q = str(body.get("question", ""))[:1200]
-    msgs.append({"role": "user", "content": f"APP_STATE:\n{state}\n\nPASSAGES:\n{ptext}\n\nQUESTION:\n{q}"})
-    client = anthropic.Anthropic()
+    hits = retrieve(q + (" document photo upload" if "document" in (ctx.get("stage") or "").lower() else ""))
+    ptext = "\n\n".join(f"[{c['cite']}]\n{c['text'][:2400]}" for c in hits)
+    msgs = clean_history(body.get("history"))
+    msgs.append({"role": "user", "content": f"APP_STATE:\n{json.dumps(ctx, ensure_ascii=False)}\n\n"
+                                            f"PASSAGES:\n{ptext}\n\nQUESTION:\n{q}"})
     kw = dict(model=MODEL, max_tokens=1500, system=SYSTEM, messages=msgs, output_config={"effort": EFFORT})
-    try:
-        r = client.beta.messages.create(betas=["server-side-fallback-2026-07-01"], fallbacks="default", **kw)
-    except (anthropic.BadRequestError, TypeError):
-        r = client.messages.create(**kw)  # model or SDK without server-side fallback support
-    if r.stop_reason == "refusal":
-        return "I can't help with that one. Ask me about your documents, the steps, or what to fix next."
-    return "".join(b.text for b in r.content if b.type == "text").strip()
+    return kw, [c["cite"] for c in hits]
+
+
+def call_model(kw):
+    """Returns (stop_reason, text). Opus and Sonnet get Anthropic's server-side refusal fallback;
+    Haiku 5.5 has none, so it is called plainly."""
+    import anthropic  # imported lazily so /health and the tests work without the SDK
+    client = anthropic.Anthropic()
+    if kw["model"].startswith("claude-haiku"):
+        r = client.messages.create(**kw)
+    else:
+        try:
+            r = client.beta.messages.create(betas=["server-side-fallback-2026-07-01"], fallbacks="default", **kw)
+        except (anthropic.BadRequestError, TypeError):
+            r = client.messages.create(**kw)  # model or SDK without server-side fallback support
+    return r.stop_reason, "".join(b.text for b in r.content if b.type == "text").strip()
+
+
+def ask(body):
+    kw, cites = build_request(body)
+    stop, text = call_model(kw)
+    if stop == "refusal":
+        return REFUSED, cites
+    if not text or BANNED_OUT.search(text):
+        return SAFE, cites
+    return text, cites
 
 
 class H(BaseHTTPRequestHandler):
@@ -163,9 +289,16 @@ class H(BaseHTTPRequestHandler):
             return self._json(429, {"error": "daily_cap"})
         try:
             body = json.loads(self.rfile.read(n))
-            answer = ask(body)
+        except ValueError:
+            return self._json(400, {"error": "bad_json"})
+        if not isinstance(body, dict) or not str(body.get("question", "")).strip():
+            return self._json(400, {"error": "schema"})
+        if has_id_number(body):  # rulebook §4.3: never send ID numbers to a model
+            return self._json(400, {"error": "id_number"})
+        try:
+            answer, cites = ask(body)
             _day["n"] += 1
-            return self._json(200, {"answer": answer, "model": MODEL, "daily_left": _daily_left()})
+            return self._json(200, {"answer": answer, "sources": cites, "model": MODEL, "daily_left": _daily_left()})
         except Exception as e:  # never leak the key or stack to the browser
             return self._json(502, {"error": "upstream", "type": type(e).__name__})
 
