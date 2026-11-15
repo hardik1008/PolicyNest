@@ -150,6 +150,25 @@ The doc findings F-04, F-13 and F-14 were fixed in the docs pass of 15 Nov (this
 - **Certificate fields (A8):** check time taken and the other fields on the live site.
 - **Not re-run after the master audit:** `eval/run_eval.js`, `eval/queue.py` and `eval/kpis.py`.
 
+## 3c. 15 Nov: features from the external implementation log (built locally)
+
+- **Triage:** `planning/FEATURE_TRIAGE.md` sorts the log into 13 features to add, 18 PolicyNest already had, and the rest rejected with reasons (live government and bank APIs, synthetic DigiLocker documents, the fraud-ring graph, accounts, server infrastructure, the phonetic auto-pass names). The log's headline numbers were not imported.
+- **Build:** one workflow ran four sequential lanes on `PolicyNest.html` (each a Haiku builder, then a Sonnet audit, then a Haiku fix and commit) and, in parallel, the runner tool. Commits: `880f2fb` (L1 capture and photo), `d2e5ac1` (L2 message and voice), `327048f` (L3 IFSC, scenarios, rules panel), `a654378` (L4 certificate), `172b323` (L5 `tools/t1_t10.py`). All five audits returned pass with fixes; the fixes are in those commits. The engine hash is unchanged (`c2063887…`).
+- **Checked by the orchestrator in the browser:**
+  - `tools/t1_t10.py` passed 10 of 10 locally.
+  - C1: a small photo is held with Retake or Use anyway.
+  - C3: the camera inputs are there.
+  - C4: the duplicate file is refused with the Aadhaar side named.
+  - C5: the version history reads v1 → v2.
+  - C6: two Read aloud buttons.
+  - C7: the preview says simulated, Copy works with a real click, the `wa.me` link has no number, the SMS is 124/160 characters, and the Hindi version works.
+  - C8: SBIN gives State Bank of India.
+  - C9: T5 sets the right variants.
+  - C10: the seal is shown and matches on verify; Print is there.
+  - C11: the rules table has 23 checks.
+  - At 375 px in both themes, the documents and certificate screens have no contrast failures, no targets under 24 px and no sideways scroll.
+- **Not checked:** the spoken voice itself (no audio in the test browser), and real phone cameras.
+
 ## 4. What is live now
 
 | Piece | State |

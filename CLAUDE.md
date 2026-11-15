@@ -122,6 +122,10 @@ curl -sS -X POST 'https://ship.embarko.ai/apps' -H 'X-App-Name: policynest' -H '
 6. OCR is tested only on clean generated images, never on real phone photos or the files in `05_SPECIMEN_DOCUMENTS/sample_specimens` (those may be real people's documents, so they were deliberately not opened or published).
 7. No notes from the "discovery call" were ever provided; the status note's section on it is a placeholder.
 
+## Regression runner
+
+`python tools/t1_t10.py [base_url]` (default `http://localhost:8000`; start the server yourself, e.g. `.claude/launch.json` "site") drives T1 to T10 through the page and exits 0 only if all pass. Run it against the live URL after a deploy. A pure-white synthetic canvas is held by the photo check: in tests, use "Use this photo anyway" or a specimen.
+
 ## How to test
 
 Open the page with `?demo=1` (`.claude/launch.json` "site" serves `policynest_mvp/site` on port 8000; or use the live URL with `?demo=1` and a `?v=N` cache-buster) and drive it with JavaScript: go to `#apply`, tick `#f-save` if you want autosave, click `[data-act="begin-nofs"]` (or `begin`), click `[data-act="sample"]` inside the Demo controls panel to fill the sample applicant, click `[data-act="details-next"]` four times (one per details page), then either `[data-act="spec-all"]` or set a `File` on `#up-PAN` etc. through a `DataTransfer` and dispatch a `change` event. A canvas with typed text ("INCOME TAX DEPARTMENT", a PAN-format number) makes a good synthetic PAN. Then `[data-act="submit"]`, wait about 8 seconds, and continue through training and exam (pass mark 50%). `S` is inside an IIFE and is not on `window`.
