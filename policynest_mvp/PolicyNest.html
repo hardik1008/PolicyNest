@@ -2231,6 +2231,9 @@ function persist(force){
    the review console after a reload says they are not kept on this device. */
 function savedCopy(){
   var o=JSON.parse(JSON.stringify(S,function(k,v){ return (k==="url"||k==="thumb"||k==="text")?undefined:v })),drop={};
+  /* The full typed account number is only needed while this page is open. A resumed application can compare the
+     last four digits, so retain no more than that on this shared-device local copy (FR-09 / data minimisation). */
+  if(o.f&&o.f.acct) o.f.acct=o.f.acct.slice(-4);
   (o.checks||[]).forEach(function(c){ if(c.reviewer||c.res==="HUMAN"||NEUTRAL_CODES[c.code]){ c.ev=applicantEv(c); delete c.ev0; if(c.key&&c.key!=="PAN") drop[c.key]=1; } if(c.code==="FACE_MATCH_LOW_REPEAT") c.code="FACE_MATCH_LOW"; });
   Object.keys(drop).forEach(function(k){ if(o.ex&&o.ex[k]) delete o.ex[k].name; var d=o.docs&&o.docs[k]; if(d&&d.ocr&&d.ocr.fields) delete d.ocr.fields.name; });
   (o.events||[]).forEach(function(e){ if(e.rules) e.rules=String(e.rules).replace(/FACE_MATCH_LOW_REPEAT/g,"FACE_MATCH_LOW"); });
