@@ -16,7 +16,12 @@ with open(root/'stage1'/'tables'/'process_map_steps.csv', encoding='utf-8', newl
                      'apps_lost':num(r['apps_lost']),'lost_pct_of_entering':num(r['lost_pct_of_entering']),
                      'median_hours':num(r['median_hours']),'p90_hours':num(r['p90_hours'])})
 
-data={'now':json.loads((out/'eval_results.json').read_text()),'extra':json.loads((out/'extra.json').read_text()),'first':json.loads((out/'baseline_3.3.0.json').read_text()),'sim':json.loads((out/'simulation.json').read_text()),'pmap':pmap}
+def rj(path):
+    # always UTF-8: on Windows the default codec is cp1252, which turns the middle dot and section sign into mojibake
+    return json.loads(path.read_text(encoding='utf-8'))
+
+data={'now':rj(out/'eval_results.json'),'extra':rj(out/'extra.json'),'first':rj(out/'baseline_3.3.0.json'),'sim':rj(out/'simulation.json'),'pmap':pmap,
+      'pmap_meta':{'period':'Jan–Sep 2026','source':'stage1/tables/process_map_steps.csv'}}
 p=root/'policynest_mvp'/'PolicyNest.html'; s=p.read_text(encoding='utf-8')
 js='/* EVAL:START */var EVAL='+json.dumps(data,ensure_ascii=False,separators=(',',':'))+';/* EVAL:END */'
 s,n=re.subn(r'/\* EVAL:START \*/.*?/\* EVAL:END \*/',lambda m:js,s,flags=re.S)
