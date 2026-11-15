@@ -1,8 +1,8 @@
 # PolicyNest build log and hand-over
 
-- **Last updated:** 15 Nov 2026, when the build was **paused** for a second planning review.
+- **Last updated:** 15 Nov 2026, after passes 1 and 2 and the original list were built locally and audited. Nothing from them is deployed yet.
 - **What this file is:** the record of what was built against `PRD.md`, how each step was checked, what is live, and where to pick up. Read it with `PRD.md` → "Decisions confirmed by the user, 15 Nov 2026" (the plan), `GRILL_LOG.md` (the decisions) and `RECONCILED_FINDINGS.md` (the findings).
-- **Status in one line:** step 0 and pass 3 are done, committed and live. Pass 1, pass 2 and the rest of the plan have not started. Building waits for the user's go after the review.
+- **Status in one line:** step 0 and pass 3 are done, committed and live. Passes 1 and 2 and the original list are built locally, committed, audited and fixed, **not deployed**. Deploying waits for the user's OK and a live check (T1–T10 and the engine hash).
 
 ## 1. Timeline
 
@@ -13,6 +13,7 @@
 | 00:48 | **Step 0:** Node, evaluation re-run, results pinned to the engine hash | `e3ed958` | — (no app change) |
 | 00:52 | **Pass 3:** Copilot server does its own lookup; applicant-safe passages | `4c87e19` | Yes, with the user's go |
 | after | Pass 3 deployed: proxy first, then site; live checks | — | Both live |
+| 15 Nov, later | Passes 1 and 2 and the original list, built locally and audited (section 3b; 18 commits `c3ce809` to `82aacd4`) | `c3ce809` … `82aacd4` | No |
 
 ## 2. Step 0: foundation
 
@@ -102,25 +103,72 @@ Requirements covered: FR-46 (server side), FR-47, FR-48, FR-49 (server side), FR
 - **An AI answer through the new lookup.** No key is set, and the server refuses before reaching the lookup. This path is covered only by the local tests.
 - **T1–T10 in a browser.** The pane was hidden; the app page is byte-for-byte unchanged, and its engine hash matches.
 
+## 3b. 15 Nov: passes 1 and 2 and the original list (built locally, not deployed)
+
+Requirements covered: FR-01 to FR-03, FR-05 to FR-07, FR-16, FR-23, FR-27 and FR-38 (both AI-proposed, not yet confirmed), FR-31, FR-36, FR-37, FR-41 to FR-45, FR-55 to FR-59, FR-61 to FR-63, FR-69. FR-60 is the runner only (not executed). FR-68 is in progress. FR-64 and FR-70 to FR-73 are not built.
+
+**Built, one row per lane.** "Sonnet audit" is the second-model review of each lane; the commits named there are its fixes.
+
+| Lane | What it does | Commits | Sonnet audit |
+|---|---|---|---|
+| H1 accessibility | Near-black text on orange fills, darker ok and info tokens, upload focus ring, status region, skip link, h2 cards, nav links, control names, phone top bar, touch targets | `49e9b93`, `5916c98` | Pass with fixes, fixes in `5916c98` |
+| H2 sitting | Hide timer, turn off limit, 10- and 2-minute warnings announced, native dialog (Escape keeps the sitting going), no seconds recorded, extend after expiry gives 10 minutes from now | `dc91864`, `4aad625` | Pass with fixes, fixes in `4aad625` |
+| H3 start and trust | Empty form, Demo controls behind `?demo=1`, six-document checklist with saving and language lines, honest compliance ticks, reviewer note kept reviewer-only | `ff8bad9`, `75231da` | Pass with fixes, fixes in `75231da` |
+| H4 honest applicant screens | No "verified" pop-up or tile for an unclear photo, unbacked time and success claims removed, time to decision measured | `1166166` | No separate fix commit |
+| H5 evaluation and audit | Measured vs running engine hash with match state, build warning on mismatch, decision events carry the engine, UTF-8 embed, in-sample labels, routed-to-a-person counts, process map | `05a3b6e`, `53f2eb2` | Pass with fixes, fixes in `53f2eb2` |
+| H6 §4.6 two-selfie rule | Two selfie scores below 0.60 in a row (new photos only; 0.60 or more resets) route the case to a reviewer with an internal referral; the applicant sees a neutral message | `96722e8`, `b581609` | Pass with fixes, fixes in `b581609` |
+| N1 queue and KPI data, held-out procedure | Reviewer-queue seed (16 cases: 11 test-set, 5 constructed), ops KPI figures with a source each, held-out procedure and templates in `eval/holdout/` | `06e9630`, `f666f6b` | Pass with fixes, fixes in `f666f6b` |
+| N2 discovery questions and docs | `planning/DISCOVERY_QUESTIONS.md` (13 questions, all "not asked"); unverified brief quote marked; stale usability-plan lines fixed | `c6040ed`, `9b382a8` | Pass with fixes, fixes in `9b382a8` |
+| Engine wording (FR-27) | The IDENTITY_NOT_CONFIRMED reason points to the Dispute button instead of "reply to this message". The only engine edit. Evaluation re-run: all 600 predictions byte-identical | `75b9f3b` | Hash checked in the master audit |
+| Static check pack | `tools/check_pack.py`: engine hash, JS syntax, banned phrases, build | `c3ce809` | — |
+| Master-audit corrections | Applicant screens and the saved copy never hold another person's name, a name tier or the AI recommendation; the "all six" pop-up fires; the reject panel says who decided; F-01 to F-09 and F-12 fixed | `82aacd4` | Master audit, below |
+
+**Master audit.** `planning/MASTER_AUDIT.md` (Opus, read-only) reviewed the range and found 1 blocker, 3 major and 10 minor findings. The corrections in `82aacd4` fix F-01 to F-09 and F-12. Still open:
+
+- **F-10:** an unreachable engine path in the UNDERAGE reason. Fixing it needs an engine edit and a re-pin.
+- **F-11:** the full typed account number is saved (FR-09, nice to have).
+
+The doc findings F-04, F-13 and F-14 were fixed in the docs pass of 15 Nov (this file, `PRD.md`, `PRODUCT.md`, `CLAUDE.md`, `planning/DISCOVERY_QUESTIONS.md`).
+
+**Browser check after `82aacd4`** (local preview, headless Chrome, `?demo=1`): T1 to T10 reach the brief's outcome. T4 applicant screen and saved copy hold no other name, before and after reload, and the review console keeps the evidence. The "all six documents are in!" pop-up fires. The reject panel names a person when a person decided. The two-selfie rule routes to a person with neutral applicant text and an internal referral. A reviewer's approval of that case stands.
+
+**How the build was run:** Haiku builders worked one at a time on `PolicyNest.html`, with Haiku runtime workers. A Sonnet auditor reviewed each lane. An Opus master audit then reviewed the range (read-only), and the corrections followed (`82aacd4`).
+
+**Not deployed.** The live site still runs engine hash `c5da9cfb…`. The current source and evaluation hash is `c2063887…` (`tools/check_pack.py` PINNED).
+
+**Open items:**
+
+- **Deploy** passes 1 and 2 and the original list, with the user's OK, then a live check: T1 to T10 and the engine hash.
+- **AI key:** the user adds `ANTHROPIC_API_KEY`, then one supervised round of questions checked against the guardrails.
+- **Usability tests:** 5 applicants and 2 reviewers. Results with codes only.
+- **Held-out labels:** made by the user independently and frozen. The evaluation is reported separately.
+- **Hand-decided cases:** a team member adopts or overrules each of the 20 (FR-73).
+- **Executive deck:** every number traced; accuracy "in-sample"; simulation "directional".
+- **Phone-photo bench (FR-72, optional):** if skipped, the deck says OCR on phone photos was not tested.
+- **Console redesign (FR-64):** waits for the user's review-console references. The queue screens and A/M/R keys come with it.
+- **F-10 and F-11** (above).
+- **Certificate fields (A8):** check time taken and the other fields on the live site.
+- **Not re-run after the master audit:** `eval/run_eval.js`, `eval/queue.py` and `eval/kpis.py`.
+
 ## 4. What is live now
 
 | Piece | State |
 |---|---|
-| Site `https://policynest.embarko.app` | 14 Nov app page (unchanged) with the 15 Nov applicant-safe `kb.json` |
+| Site `https://policynest.embarko.app` | 14 Nov app page (unchanged) with the 15 Nov applicant-safe `kb.json`. Passes 1 and 2 and the original list are **not deployed** |
 | Proxy `https://policynest-copilot.embarko.app` | Pass 3 build; **AI answers off (no key)** |
-| Engine | 3.4.0, hash `c5da9cfb…`, scores 600/600 in-sample on this hash |
+| Engine | 3.4.0. Live: hash `c5da9cfb…`. Local source and evaluation: `c2063887…` (600 of 600 in-sample, same predictions) |
 
 ## 5. Where to pick up
 
-1. **User:** finish the planning review. Then, when ready, add `ANTHROPIC_API_KEY` in the `policynest-copilot` App setup tab at https://embarko.ai/app, and run one supervised round of real questions to check the guardrails live (PRD before-judging checklist).
-2. **Pass 1** (accessibility and trust) is next in the plan. Its scope and requirement IDs are in PRD → "The confirmed plan". Two items in it are AI-proposed and still need confirming: FR-27 (reject-panel restart) and FR-38 (honest compliance ticks).
-3. **Pass 2** (honest numbers), then the user's original list: queue data, the §4.6 two-selfie-failures rule, the held-out set, specimen prints and photo bench (optional), deck last.
-4. **Human work before judging:** usability tests (5 + 2), the 20-case adoption, held-out labels, the deck (PRD checklist).
+1. **User:** the deploy OK for passes 1 and 2 and the original list, then the live check (T1 to T10, engine hash). Nothing is deployed until then.
+2. **User:** add `ANTHROPIC_API_KEY` in the `policynest-copilot` App setup tab at https://embarko.ai/app, and run one supervised round of real questions against the guardrails.
+3. **Human work before judging:** usability tests (5 + 2), adoption of the 20 hand-decided cases, held-out labels, the deck (PRD checklist).
+4. **Later:** the console redesign, when the references arrive; F-10 (engine edit and re-pin); F-11.
 
 ## 6. Open items and cautions
 
 - **25 grill decisions are still AI-answered** (list in GRILL_LOG → "Still AI-answered").
 - **Line endings:** git's `core.autocrlf` is on for this user, so it warns "LF will be replaced by CRLF". The engine hash normalises line endings, so this does not affect the evaluation check.
-- **`PolicyNest.html` was not changed** in step 0 or pass 3. The first app-file change is pass 1. After it, re-check the engine hash, or re-run the evaluation if the engine block was touched.
+- **`PolicyNest.html` changed** in passes 1 and 2 and the original list (section 3b). The engine block changed once (`75b9f3b`, wording only). The evaluation was re-run and all 600 predictions are byte-identical. The engine hash is `c2063887…` in the source, the build and the evaluation. The live site still runs `c5da9cfb…`.
 - **Second autoresearch skill** at `~/.claude/skills/autoresearch` is still installed (RF-78).
 - **No remote** is configured; nothing was pushed.

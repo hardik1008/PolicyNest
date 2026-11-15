@@ -6,7 +6,7 @@ Written 15 Nov 2026. Covers FR-69 (RF-67, RF-80, G-43, Q13).
 
 ## Count check
 
-The brief's section 10 has **nine** questions, not ten. Checked 15 Nov 2026 against `01_ORIGINAL_CHALLENGE/PS-01_CHALLENGE_BRIEF.md` (lines 189 to 209). The nine are copied below word for word. FR-69 asks for 14 questions; this file has 13 (nine from the brief, four added). No tenth question was invented. If the problem owner or the user wants a tenth, add it in the table and change FR-69 to match.
+The brief's section 10 has **nine** questions, not ten. Checked 15 Nov 2026 against `01_ORIGINAL_CHALLENGE/PS-01_CHALLENGE_BRIEF.md` (lines 189 to 209). The nine are copied below word for word. FR-69 asks for 13 questions (nine from the brief, four added); this file has 13. No tenth question was invented. If the problem owner or the user wants a tenth, add it in the table and change FR-69 to match.
 
 ## Questions
 

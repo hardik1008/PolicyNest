@@ -14,7 +14,7 @@ The numbered folders `01_…` to `08_…` in this directory are the source packa
 - **No API keys** and no calls to government or bank services. PAN, penny-drop, face-match and IRDAI registry results are simulated. **Changed 14 Nov:** one exception, the Onboarding Copilot's Anthropic key. It lives only in the root `.env` (placeholder `your-key-here`, never deployed) and in the `policynest-copilot` Embarko app's env vars. The browser never sees it.
 - **Focused onboarding (14 Nov, user's design, inspired by HackerRank and Codeforces):**
   - a first-visit checklist ("Before you start");
-  - a full-screen 30-minute sitting for details and documents, extendable by 10 minutes at a time;
+  - a 30-minute sitting for details and documents (full screen optional on desktop, never on phones), extendable by 10 minutes at a time, with the timer hideable or switched off;
   - leaving the screen warns and logs `FOCUS_EXIT`, and **never restarts or wipes**;
   - details on 4 progressive pages, documents one at a time;
   - autosave and resume across sittings, only with the applicant's consent;
@@ -36,7 +36,7 @@ The numbered folders `01_…` to `08_…` in this directory are the source packa
   - **Held-out set:** labelled by the user independently and frozen before the engine sees it.
   - **Usability results:** recorded with participant codes only, in `planning/usability/results.csv`.
   - **Build order:** accessibility fixes → queue data → Node and held-out set → process map → specimen prints and photo bench → deck last.
-  - **Go-ahead:** nothing in this list is built until the user says go.
+  - **Go-ahead:** on 15 Nov, passes 1–2 and the original list were built locally (accessibility and trust, honest numbers, queue data, the §4.6 selfie rule, discovery questions). Nothing from them is deployed yet. Still open: the deploy with the user's OK and a live check, held-out labels, specimen prints, the optional phone-photo bench, the deck, and the console redesign (waits for references).
 
 **Product spec:** `PRODUCT.md` lists every functional goal with its status (Built / Partial / Not built / Future), the T1–T10 results and the success metrics. Update it when a goal's status changes.
 
@@ -55,14 +55,18 @@ The numbered folders `01_…` to `08_…` in this directory are the source packa
   - **50 AI answers per UTC day** (`COPILOT_DAILY_CAP`). After that, the page falls back to rulebook answers and says so.
 - **Client address:** the second entry from the right of `X-Forwarded-For` (`XFF_TRUSTED_HOPS=2`, measured on Embarko). `/api/health` reports `daily_left` and `xff_hops`. |
 | `.env` / `.env.example` | Local secrets (placeholder only). Never deploy or commit them; `.gitignore` lists `.env`. |
+| `tools/check_pack.py` | Static check pack: the engine hash (PINNED), JS syntax, banned phrases and the build. |
+| `eval/queue.py`, `eval/kpis.py` | Build the reviewer-queue seed (`eval/out/queue_seed.json`) and the ops KPI figures (`eval/out/kpis.json`), with a source for each figure. |
+| `eval/holdout/` | The held-out set procedure (`README.md`) and label templates. The labels are not made yet. |
+| `planning/DISCOVERY_QUESTIONS.md` | The discovery questions for the problem owner. All are "not asked". |
 
 ## How the app works
 
-- **Views** (sidebar): Dashboard, Application, Review console (the "ops console"), Audit trail. Hash routes: `#dashboard`, `#apply`, `#review`, `#audit`.
+- **Views** (sidebar): Dashboard, Application, Review console (the "ops console"), Audit trail. Also Evaluation. Hash routes: `#dashboard`, `#apply`, `#review`, `#evaluation`, `#audit`.
 - **Application steps**: Your details → Documents → Verification → Training → Exam → Certificate. All state is one object `S`.
 - **Start of the application:** before step 0, `stepIntro` shows the checklist and the save-consent box; `stepResume` shows when the applicant is not in focus mode.
-- **Saving:** with consent, `persist()` writes `S` to `localStorage` key `pn-onboarding-v1`. It drops every `url`, `thumb` or `text` key, so images and raw OCR text are never saved. It skips saving while checks run. `restore()` loads the save on boot and deletes it once expired.
-- **Sitting and focus:** `startSitting`, `tick`, `endSitting`, `enterFocus` and `leaveFocus` run the sitting. `focusUI` drives the `#focusbar`. `visibilitychange` and `fullscreenchange` handlers warn the applicant, except while the file picker is open (`PICKING`).
+- **Saving:** with consent, `persist()` writes `S` to `localStorage` key `pn-onboarding-v1`. It drops every `url`, `thumb` or `text` key, so images and raw OCR text are never saved. It skips saving while checks run. `restore()` loads the save on boot and deletes it once expired. Reviewer-only material is never saved: the reviewer note (`rnote`), the AI recommendation for a reviewer, and internal events. `restore()` strips internal events that an older build saved.
+- **Sitting and focus:** `startSitting`, `tick`, `endSitting`, `enterFocus` and `leaveFocus` run the sitting. `focusUI` drives the `#focusbar`. `visibilitychange` warns the applicant. `fullscreenchange` shows a "Return to full screen" banner, not a warning; closing full screen is not an exit. Touch devices get no full screen and no warnings. The timer can be hidden or its limit turned off. Warnings use a native `<dialog>`, where Escape keeps the sitting going. Both handlers are ignored while the file picker is open (`PICKING`).
 - **Instant feedback:** `afterDoc` calls `feedbackFor`, which runs the *unchanged* engine `decide` on the documents read so far and keeps only the checks for that document; `fbHtml` renders them. A refused file gets `rejectFeedback`.
 - **Copilot** (`cp*` functions):
   - `kbLoad` fetches `kb.json` and the proxy's `/api/health`;
@@ -73,7 +77,7 @@ The numbered folders `01_…` to `08_…` in this directory are the source packa
 - **OCR and type gate** (`readDoc`, `classify`, `judge`, `addDoc`): images go through Tesseract.js 5.1.0 in the browser; PDFs use their text layer via pdf.js 3.11.174, else the first page is OCR'd. `classify` scores keywords and number patterns to decide PAN / Aadhaar / Class 10 or 12 marksheet / bank document. A wrong or unrecognised file is refused with a reason. The selfie slot refuses documents and text-heavy images and uses the browser `FaceDetector` only where it exists. Raw OCR text is never stored; Aadhaar is masked to the last four digits.
 - **Engine block** (between `/* ENGINE:START` and `/* ENGINE:END */` in the source; pure functions, no DOM, so the test-set evaluation can run the same code in Node): `parseDoc` reads name, DOB, PAN, Aadhaar last four, address state, board, result, IFSC, account last four from each document's OCR text (fixes O/0 and I/l/1 noise by position; a field containing unreadable characters counts as not read). `decide` runs about 25 checks with the **PAN card's OCR values as the anchor**; typed form values are only compared (INFO). `nameTier` has the rulebook name tiers (tier 6 = surname change, Human only; tier 7 = different person, NAME_MISMATCH). `followupItems`/`followupText` build the one consolidated message (English and Hindi); `rejectReasons` gives plain-language rejection reasons.
 - **Simulated services** (`SIM`, `buildX`): penny-drop returns the holder name read from the cheque; face match 0.91 and IRDAI registry "no record" are fixed, except when a selfie specimen variant sets a score.
-- **"Use specimen"** builds synthetic document text from the typed details in the same layout as the PS-01 test set and sends it through the same parser. A **variant** dropdown per slot adds one defect (blurry, DOB off by a year, spelling variant, different person, parent's account, company PAN, other state, unlisted board, Class 10 fail, face score 0.68 or 0.52) so T2–T10 can be triggered without real documents.
+- **"Use specimen"** builds synthetic document text from the typed details in the same layout as the PS-01 test set and sends it through the same parser. A **variant** dropdown per slot adds one defect (blurry, DOB off by a year, spelling variant, different person, parent's account, company PAN, other state, unlisted board, Class 10 fail, face score 0.68 or 0.52) so T2–T10 can be triggered without real documents. The variant pickers, the specimen buttons and "Load sample applicant" sit in a closed Demo controls panel, opened with `?demo=1`.
 - **Follow-up and re-check** (`finishDecision`, `fixPanel`, `recheck`): NEEDS_MORE_INFO sends one message listing every fix (simulated WhatsApp/SMS). Re-uploads are tracked in `S.changed`; `recheck` re-reads only those documents, re-runs checks that involve them (or everything anchored on the PAN if the PAN changed) and marks the rest "carried over". Each round is in `S.rounds` and shown on the Audit trail page; every event carries its round.
 - **Rules added in step 4:** §4.1 any document with OCR confidence below 0.75 is untrusted (REUPLOAD; its values are not used); §4.2 no O/0 correction when the typed PAN equals the card's characters; Step 0 typed-detail rejections (declared education below Class 10, typed PAN format/holder, typed DOB under 18) when the document cannot settle them. The form now asks for highest education.
 - REJECT shows plain-language reasons (no fraud wording) and a **Dispute** button, which routes the case to a reviewer (§9).
@@ -101,7 +105,9 @@ curl -sS -X POST 'https://ship.embarko.ai/apps' -H 'X-App-Name: policynest' -H '
   - **Until then,** `/api/health` reports `llm:false` and the Copilot answers from the rulebook and app state only.
 - A private claude.ai artifact copy and a one-page status note (a Claude doc) exist on the **previous** Claude account; a different account cannot open them. Their content is summarised below.
 
-## Status against the brief (as of 13 Nov 2026)
+## Status against the brief (as of 15 Nov 2026)
+
+**15 Nov (built locally, not deployed):** passes 1–2 and the original list: accessibility, the softer focus mode, the empty form and Demo controls, honest numbers, queue data, the §4.6 two-selfie rule, the held-out procedure and the discovery questions. The master audit's 1 blocker and 3 major findings are fixed in `82aacd4`; F-10 and F-11 are open. Details: `BUILD_LOG.md` section 3b.
 
 **Works:** reviewer routing for Human-only cases and disputes (step 3, 14 Nov); clean applicant journey end to end to CERTIFIED; cross-checks on OCR-read values (step 1, 13 Nov); one consolidated follow-up message in English/Hindi with partial re-check and rounds in the audit trail (step 2, 13 Nov); plain-language REJECT; on-device OCR with per-slot type checks; rule citations; privacy masking; public URL. Tested in headless Chrome with Tesseract served from npm (the CDN is blocked in Claude's workspace).
 
@@ -111,18 +117,18 @@ curl -sS -X POST 'https://ship.embarko.ai/apps' -H 'X-App-Name: policynest' -H '
 1. ~~Cross-checks use typed details~~ done (step 1).
 2. ~~Needs-more-info path~~ done (step 2).
 3. ~~Reviewer routing~~ done (step 3). The review console holds one application, not a multi-case queue.
-4. ~~Reject path~~ done (plain-language reasons; disputes are not built).
+4. ~~Reject path~~ done (plain-language reasons; disputes are built in step 3; the reject panel also offers Start a new application and Delete my saved progress).
 5. ~~Evaluation~~ done (step 4, 14 Nov): `eval/run_eval.js` runs the engine block from PolicyNest.html on all 600; results in `eval/out/`, report in `eval/EVALUATION_REPORT.md`, and an **Evaluation** page in the app (`#evaluation`, data embedded by `eval/embed.py`). First run 98.0%; after three rulebook-based refinements 100.0% (in-sample; say so). Fairness by gender/state/name pattern included. Before/after simulation added (`eval/simulate.py` → `eval/out/simulation.json`, shown on the Evaluation page): median 8.4 → 7.4 days with the engine, 6.1 with the training link at KYC; +106 agents if silence fell to 10%; reviewer minutes estimate 0.38. **Still not done:** applicant clarity test with five users; real reviewer minutes; OCR on real phone photos.
 6. OCR is tested only on clean generated images, never on real phone photos or the files in `05_SPECIMEN_DOCUMENTS/sample_specimens` (those may be real people's documents, so they were deliberately not opened or published).
 7. No notes from the "discovery call" were ever provided; the status note's section on it is a placeholder.
 
 ## How to test
 
-Open the page (`.claude/launch.json` "site" serves `policynest_mvp/site` on port 8000; or use the live URL with a `?v=N` cache-buster) and drive it with JavaScript: go to `#apply`, tick `#f-save` if you want autosave, click `[data-act="begin"]`, click `[data-act="details-next"]` four times (one per details page), then either `[data-act="spec-all"]` or set a `File` on `#up-PAN` etc. through a `DataTransfer` and dispatch a `change` event. A canvas with typed text ("INCOME TAX DEPARTMENT", a PAN-format number) makes a good synthetic PAN. Then `[data-act="submit"]`, wait about 8 seconds, and continue through training and exam (pass mark 50%).
+Open the page with `?demo=1` (`.claude/launch.json` "site" serves `policynest_mvp/site` on port 8000; or use the live URL with `?demo=1` and a `?v=N` cache-buster) and drive it with JavaScript: go to `#apply`, tick `#f-save` if you want autosave, click `[data-act="begin-nofs"]` (or `begin`), click `[data-act="sample"]` inside the Demo controls panel to fill the sample applicant, click `[data-act="details-next"]` four times (one per details page), then either `[data-act="spec-all"]` or set a `File` on `#up-PAN` etc. through a `DataTransfer` and dispatch a `change` event. A canvas with typed text ("INCOME TAX DEPARTMENT", a PAN-format number) makes a good synthetic PAN. Then `[data-act="submit"]`, wait about 8 seconds, and continue through training and exam (pass mark 50%). `S` is inside an IIFE and is not on `window`.
 - **Tiles:** the document tiles are `[data-dk="i"]` buttons, and only the open document's card is in the DOM.
 - **Leaving the screen:** simulate it by overriding `document.hidden` and dispatching `visibilitychange`.
 - **Timer:** test it by overriding `Date.now`.
-- **Engine check:** the engine block's SHA-256 must match the live site's, or the evaluation must be re-run.
+- **Engine check:** the engine block's SHA-256 must match the live site's, or the evaluation must be re-run. The live site still runs `c5da9cfb…`. The current hash is `c2063887…` (`tools/check_pack.py` PINNED). Redeploy before any live T1–T10 check.
 
 ## Working preferences observed
 
