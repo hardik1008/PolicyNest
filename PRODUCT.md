@@ -123,23 +123,23 @@ Every defect scenario (T2 to T10) can be triggered on demand through specimen va
 
 ### 4.6b Added 15 Nov from the external feature triage (`planning/FEATURE_TRIAGE.md`)
 
-Built locally and checked in the browser; not yet deployed.
+Built, checked in the browser, and live since 15 Nov (Embarko deployment `cmwhpsgz202ib13bal6lwopu8`; live engine hash matches; `tools/t1_t10.py` 10/10 on the live URL).
 
 | # | Feature | Status |
 |---|---|---|
-| C1 | Photo check before OCR (blurry, glare, too dark, too small) with "Retake photo" or "Use this photo anyway"; heuristic, OCR confidence still decides | Built locally |
-| C2 | Phone photos turned upright and downscaled to 1920 px before OCR | Built locally |
-| C3 | "Take photo" (rear camera) and "Choose file" per slot; "Take selfie" opens the front camera; selfie accepts images only | Built locally |
-| C4 | The same file in two slots is refused (SHA-256 of the file, this application only) | Built locally |
-| C5 | Version history per document (v1, v2 with round and file hash; no images kept) | Built locally |
-| C6 | Read aloud in Hindi or English (on-device speech; hidden where unsupported) | Built locally |
-| C7 | Follow-up shown as a phone-style message: Copy message, Open in WhatsApp (no number pre-filled), SMS version of 160 characters or fewer; sending stays simulated | Built locally |
-| C8 | Offline IFSC helper: format check and bank name from a bundled table; nothing is looked up online | Built locally |
-| C9 | Scenario launcher in Demo controls: pick T1 to T10 and the variants are set | Built locally |
-| C10 | Certificate: Print or save as PDF, and an integrity seal with "Verify this certificate" (proves the fields were not edited on this device, not that IRDAI issued it) | Built locally |
-| C11 | "Rules applied" table on the Audit trail (every check with its rulebook section) | Built locally |
-| C12 | `tools/t1_t10.py`: Playwright runner for T1 to T10, local or live | Built (10/10 locally) |
-| C13 | "Good photo" hints before a slot's first upload | Built locally |
+| C1 | Photo check before OCR (blurry, glare, too dark, too small) with "Retake photo" or "Use this photo anyway"; heuristic, OCR confidence still decides | Live |
+| C2 | Phone photos turned upright and downscaled to 1920 px before OCR | Live |
+| C3 | "Take photo" (rear camera) and "Choose file" per slot; "Take selfie" opens the front camera; selfie accepts images only | Live |
+| C4 | The same file in two slots is refused (SHA-256 of the file, this application only) | Live |
+| C5 | Version history per document (v1, v2 with round and file hash; no images kept) | Live |
+| C6 | Read aloud in Hindi or English (on-device speech; hidden where unsupported) | Live |
+| C7 | Follow-up shown as a phone-style message: Copy message, Open in WhatsApp (no number pre-filled), SMS version of 160 characters or fewer; sending stays simulated | Live |
+| C8 | Offline IFSC helper: format check and bank name from a bundled table; nothing is looked up online | Live |
+| C9 | Scenario launcher in Demo controls: pick T1 to T10 and the variants are set | Live |
+| C10 | Certificate: Print or save as PDF, and an integrity seal with "Verify this certificate" (proves the fields were not edited on this device, not that IRDAI issued it) | Live |
+| C11 | "Rules applied" table on the Audit trail (every check with its rulebook section) | Live |
+| C12 | `tools/t1_t10.py`: Playwright runner for T1 to T10, local or live | Live (10/10 on the live site) |
+| C13 | "Good photo" hints before a slot's first upload | Live |
 
 ### 4.7 Stretch (future, not committed)
 
