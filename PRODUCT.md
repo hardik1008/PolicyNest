@@ -3,7 +3,7 @@
 AI-first onboarding for POSP (Point of Sales Person) insurance agents. Masters' Union Applied AI Challenge, problem PS-01, set by InsuranceDekho. PolicyNest Insurance Brokers is fictional and all data is synthetic.
 
 - **Live:** https://policynest.embarko.app
-- **Written:** 14 Nov 2026 (updated the same day after review: straight-through definition, first-run figures, exam pass mark, priorities, challenge deliverables; then after the Phase 1–3 audit and grilling: A10, R8, R9 and the agreed approach in §8; 15 Nov: passes 1–2, the §4.6 rule, queue data and discovery questions built locally, not deployed)
+- **Written:** 14 Nov 2026 (updated the same day after review: straight-through definition, first-run figures, exam pass mark, priorities, challenge deliverables; then after the Phase 1–3 audit and grilling: A10, R8, R9 and the agreed approach in §8; 15 Nov: passes 1–2, the §4.6 rule, queue data and discovery questions built and live (15 Nov))
 - **Sources:** `01_ORIGINAL_CHALLENGE/PS-01_CHALLENGE_BRIEF.md`, `03_RULEBOOK_AND_REGULATIONS/PS-01_ONBOARDING_RULEBOOK_V3_2.md`, `02_BUSINESS_REQUIREMENTS/05_DELIVERABLES_AND_EVALUATION_CRITERIA.md`, `eval/EVALUATION_REPORT.md`
 - **How the code works:** see `CLAUDE.md`. This file says what the product does and why.
 
@@ -55,17 +55,17 @@ Every defect scenario (T2 to T10) can be triggered on demand through specimen va
 | A3 | Six document slots: PAN, Aadhaar front, Aadhaar back, Class 10 marksheet, cheque or bank statement, selfie | Built |
 | A4 | Each slot accepts only its own document type; a wrong or unreadable file is refused with the reason | Built |
 | A5 | A status the applicant can see at every step: stepper, progress gauge, per-document cards with an "AI observation" | Built |
-| A6 | Encouraging pop-ups that use the applicant's first name on every success; gentle wording on a follow-up or a failed exam | Built (English only); progress counts fixed 15 Nov, built locally, not deployed |
+| A6 | Encouraging pop-ups that use the applicant's first name on every success; gentle wording on a follow-up or a failed exam | Built (English only); progress counts fixed 15 Nov, built and live (15 Nov) |
 | A7 | Training (15 h logged across five modules) and a short exam, as placeholders. **Pass mark changed 40% → 50% on 14 Nov.** The sources conflict: the data dictionary (`06_DATA_DICTIONARY`, "≥ 50%"), the regulatory matrix ("e.g. 50%") and the state machine say 50%, while the data pack's exam-failure events say "Score below 40%". The rulebook gives no pass mark. | Built (course content and exam are out of scope per the brief) |
-| A11 | First-visit checklist: the six documents, what is accepted, what gets a document refused (rulebook §3–4), the steps after documents, and consent to save on this device (box unticked by default). It also says the sitting covers details and documents only, gives the language, and warns that a shared device is not private | Built (14 Nov); checklist lines added 15 Nov, built locally, not deployed |
-| A12 | Focused 30-minute sitting for details and documents: optional full screen ("Start without full screen"), countdown that can be hidden or turned off, warnings at 10 and 2 min, extend by 10 min (WCAG 2.2.1). Leaving warns and logs `FOCUS_EXIT` with no duration, never resets; the file picker is ignored. Closing full screen shows a banner and is not an exit. Touch devices get no full screen and no warnings. | Built (14 Nov); softer focus mode built locally 15 Nov, not deployed. Tested in desktop Chromium; not tested on iOS Safari, where the full-screen request falls back to a full-viewport layout |
+| A11 | First-visit checklist: the six documents, what is accepted, what gets a document refused (rulebook §3–4), the steps after documents, and consent to save on this device (box unticked by default). It also says the sitting covers details and documents only, gives the language, and warns that a shared device is not private | Built (14 Nov); checklist lines added 15 Nov, built and live (15 Nov) |
+| A12 | Focused 30-minute sitting for details and documents: optional full screen ("Start without full screen"), countdown that can be hidden or turned off, warnings at 10 and 2 min, extend by 10 min (WCAG 2.2.1). Leaving warns and logs `FOCUS_EXIT` with no duration, never resets; the file picker is ignored. Closing full screen shows a banner and is not an exit. Touch devices get no full screen and no warnings. | Built (14 Nov); softer focus mode built and live 15 Nov. Tested in desktop Chromium; not tested on iOS Safari, where the full-screen request falls back to a full-viewport layout |
 | A13 | Progressive pages (details over 4 pages, one document at a time) with autosave and resume across sittings. Only with consent. Never stores images or raw OCR text. Expires after 30 days (14 days once a follow-up is open). | Built (14 Nov; `localStorage`, not IndexedDB) |
 | A14 | Instant feedback after every upload: what was read, what is fine, what to fix with numbered steps, and what goes to a person. Uses the unchanged engine. | Built (14 Nov) |
 | A15 | Onboarding Copilot: proactive next-step suggestions plus Q&A. It uses BM25 retrieval over the rulebook and reference docs (55 passages, `kb.json`) and the live app state (first name and statuses only). Claude answers through the `policynest-copilot` proxy, which holds the key server-side. Guardrails: never decides, no fraud wording, refuses full ID numbers. | Partial: the proxy is deployed but **has no API key yet**, so answers come from the rulebook and app state only. No POSP manual exists in the source package (`MISSING_SOURCE_MATERIALS.md`), so the corpus is the rulebook and specs. |
 | A8 | Certificate with POSP code, masked PAN, time taken, human touches and follow-ups | Built (marked as a demonstration certificate). Check the certificate fields, including time taken, at the live check (not seen in the master audit) |
 | A9 | Light and dark themes with a toggle | Built |
-| A10 | Accessibility: visible focus on upload buttons, text contrast ≥ 4.5:1 (near-black text on orange fills), targets ≥ 24 px, heading order, skip link, a narrow live region, a compact top bar on phones, links for navigation, a leave warning once data is entered | Built locally 15 Nov (H1), not deployed. The 14 Nov audit's issues are in `planning/PHASE1_AUDIT_AND_PLAN.md` |
-| A16 | Empty form on first visit: nothing pre-filled, consent unticked. Specimens, variant pickers and the sample applicant sit in a closed "Demo controls" panel, opened with `?demo=1` | Built locally 15 Nov (H3), not deployed |
+| A10 | Accessibility: visible focus on upload buttons, text contrast ≥ 4.5:1 (near-black text on orange fills), targets ≥ 24 px, heading order, skip link, a narrow live region, a compact top bar on phones, links for navigation, a leave warning once data is entered | Built and live 15 Nov (H1). The 14 Nov audit's issues are in `planning/PHASE1_AUDIT_AND_PLAN.md` |
+| A16 | Empty form on first visit: nothing pre-filled, consent unticked. Specimens, variant pickers and the sample applicant sit in a closed "Demo controls" panel, opened with `?demo=1` | Built and live 15 Nov (H3) |
 
 ### 4.2 Document reading (brief: Must have)
 
@@ -106,16 +106,16 @@ Every defect scenario (T2 to T10) can be triggered on demand through specimen va
 | R3 | Reviewer task: AI recommendation and evidence side by side (PAN vs the other document; PAN image vs selfie with the score; board vs the recognised list), a note, and Approve / Ask for more info / Reject (disputes: Uphold / Ask / Overturn) | Built |
 | R4 | Reject needs a note; a confirmed different person is referred internally to the fraud desk while the applicant gets a neutral message | Built |
 | R5 | A reviewer's approval is kept on later re-checks while the evidence is unchanged; human touches and reviewer time are logged | Built |
-| R6 | **Reviewer dashboard with a multi-case queue**, showing the AI's decision and where it was unsure. Built once, after R7, so it is not built twice. | **Partial.** The console holds one application. Queue data is built locally 15 Nov (`eval/out/queue_seed.json`, `eval/out/kpis.json`); the queue screens are not built and wait for the user's references. |
+| R6 | **Reviewer dashboard with a multi-case queue**, showing the AI's decision and where it was unsure. Built once, after R7, so it is not built twice. | **Partial.** The console holds one application. Queue data was built 15 Nov (`eval/out/queue_seed.json`, `eval/out/kpis.json`); the queue screens are not built and wait for the user's references. |
 | R7 | Review console redesign to the new look | Not built. Waiting for the user's reference designs. |
-| R8 | Rulebook §4.6: two selfie failures below 0.60 in a row go to a reviewer, with an internal fraud-desk referral; the applicant sees only the neutral "a person is checking" message | Built locally 15 Nov (`96722e8`, `b581609`), outside the engine; not deployed (decided 14 Nov, Phase 3 Q6/Q18) |
+| R8 | Rulebook §4.6: two selfie failures below 0.60 in a row go to a reviewer, with an internal fraud-desk referral; the applicant sees only the neutral "a person is checking" message | Built and live 15 Nov (`96722e8`, `b581609`), outside the engine (decided 14 Nov, Phase 3 Q6/Q18) |
 | R9 | Reviewer keys A / M / R (Approve / Ask / Reject) when focus is not in a text field, instead of the cockpit spec's F1–F3 (F1 is browser help on Windows) | Not built (decided 14 Nov, Q5). Built with the queue screens |
 
 ### 4.6 Audit, evaluation, simulation (brief: Must have / Should have)
 
 | # | Goal | Status |
 |---|---|---|
-| E1 | Audit trail: every decision, the rule behind it, the round, the engine version; filterable timeline; engine hash on each decision event; internal events marked and never saved | Built. Hash and internal marking added 15 Nov, built locally, not deployed |
+| E1 | Audit trail: every decision, the rule behind it, the round, the engine version; filterable timeline; engine hash on each decision event; internal events marked and never saved | Built. Hash and internal marking added 15 Nov, built and live (15 Nov) |
 | E2 | Evaluation on the 600-application test set, using the same engine code the site runs: accuracy, precision and recall for REJECT and NEEDS_MORE_INFO, confusion matrix | Built (`eval/`, Evaluation page) |
 | E3 | Fairness check by gender, state and name pattern | Built |
 | E4 | Before/after simulation of time-to-certificate and drop-off from the applications workbook | Built (directional, not a forecast) |
@@ -206,7 +206,7 @@ The package's own rubric (`02_BUSINESS_REQUIREMENTS/05_DELIVERABLES_AND_EVALUATI
 
 | Stage | Deliverable | Rubric area | Status |
 |---|---|---|---|
-| 1 | Process map of today's journey from stage_events, with time and drop-off per step | Business understanding (20%) | Built locally on the Evaluation page (`stage1/tables/process_map_steps.csv`, 15 Nov); not deployed. The source package has its own data-insights workbook. |
+| 1 | Process map of today's journey from stage_events, with time and drop-off per step | Business understanding (20%) | Built and live on the Evaluation page (`stage1/tables/process_map_steps.csv`, 15 Nov). The source package has its own data-insights workbook. |
 | 1 | 20 test applications decided by hand, at least 8 of them hard cases | Accuracy (30%) | Not found. Planned: 20 of the held-out cases, labelled by the user (Q9). |
 | 1 | Which decisions the product makes and which it routes to a person | Accuracy | Done: R1, R2 and the statement below |
 | 1 | First business case: hours and drop-offs saved | Business understanding | Partial: the E4 simulation covers days and drop-off; reviewer time is an estimate |

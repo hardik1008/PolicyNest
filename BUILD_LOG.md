@@ -1,8 +1,8 @@
 # PolicyNest build log and hand-over
 
-- **Last updated:** 15 Nov 2026, after passes 1 and 2 and the original list were built locally and audited. Nothing from them is deployed yet.
+- **Last updated:** 15 Nov 2026, after passes 1 and 2 and the original list were built and audited. They were deployed the same day after the user's OK, and checked live.
 - **What this file is:** the record of what was built against `PRD.md`, how each step was checked, what is live, and where to pick up. Read it with `PRD.md` → "Decisions confirmed by the user, 15 Nov 2026" (the plan), `GRILL_LOG.md` (the decisions) and `RECONCILED_FINDINGS.md` (the findings).
-- **Status in one line:** step 0 and pass 3 are done, committed and live. Passes 1 and 2 and the original list are built locally, committed, audited and fixed, **not deployed**. Deploying waits for the user's OK and a live check (T1–T10 and the engine hash).
+- **Status in one line:** step 0 and pass 3 are done, committed and live. Passes 1 and 2 and the original list are built, committed, audited, fixed and **live** (deployed 15 Nov after the user's OK; engine hash match and T1–T10 passed live).
 
 ## 1. Timeline
 
@@ -13,7 +13,7 @@
 | 00:48 | **Step 0:** Node, evaluation re-run, results pinned to the engine hash | `e3ed958` | — (no app change) |
 | 00:52 | **Pass 3:** Copilot server does its own lookup; applicant-safe passages | `4c87e19` | Yes, with the user's go |
 | after | Pass 3 deployed: proxy first, then site; live checks | — | Both live |
-| 15 Nov, later | Passes 1 and 2 and the original list, built locally and audited (section 3b; 18 commits `c3ce809` to `82aacd4`) | `c3ce809` … `82aacd4` | No |
+| 15 Nov, later | Passes 1 and 2 and the original list, built and audited (section 3b; commits `c3ce809` to `82aacd4`, docs `e0f3e2b`) | `c3ce809` … `e0f3e2b` | Yes, deployed after the user's OK; live check passed |
 
 ## 2. Step 0: foundation
 
@@ -103,7 +103,7 @@ Requirements covered: FR-46 (server side), FR-47, FR-48, FR-49 (server side), FR
 - **An AI answer through the new lookup.** No key is set, and the server refuses before reaching the lookup. This path is covered only by the local tests.
 - **T1–T10 in a browser.** The pane was hidden; the app page is byte-for-byte unchanged, and its engine hash matches.
 
-## 3b. 15 Nov: passes 1 and 2 and the original list (built locally, not deployed)
+## 3b. 15 Nov: passes 1 and 2 and the original list (built and live (15 Nov))
 
 Requirements covered: FR-01 to FR-03, FR-05 to FR-07, FR-16, FR-23, FR-27 and FR-38 (both AI-proposed, not yet confirmed), FR-31, FR-36, FR-37, FR-41 to FR-45, FR-55 to FR-59, FR-61 to FR-63, FR-69. FR-60 is the runner only (not executed). FR-68 is in progress. FR-64 and FR-70 to FR-73 are not built.
 
@@ -134,7 +134,7 @@ The doc findings F-04, F-13 and F-14 were fixed in the docs pass of 15 Nov (this
 
 **How the build was run:** Haiku builders worked one at a time on `PolicyNest.html`, with Haiku runtime workers. A Sonnet auditor reviewed each lane. An Opus master audit then reviewed the range (read-only), and the corrections followed (`82aacd4`).
 
-**Not deployed.** The live site still runs engine hash `c5da9cfb…`. The current source and evaluation hash is `c2063887…` (`tools/check_pack.py` PINNED).
+**Deployed 15 Nov** after the user's OK (deployed 15 Nov, Embarko deployment cmwhkvdrr00dq13bamf5bwc1q; live engine hash c2063887 matches the evaluation; T1–T10 passed on the live site). Live check: the served page's engine slice hashes to `c2063887…`, equal to `eval/out/eval_results.json`; the Evaluation page shows "match"; T1–T10 run through the live page's own controls with `?demo=1` all reached the brief's outcome (T4 and T8 to a person; T5 two fixes in one message; T6 plain-language PAN reason; T9 approved; T10 re-checked only the replaced documents with both rounds in the audit trail); no other person's name on applicant screens; no console errors under the site's security policy.
 
 **Open items:**
 
@@ -154,9 +154,9 @@ The doc findings F-04, F-13 and F-14 were fixed in the docs pass of 15 Nov (this
 
 | Piece | State |
 |---|---|
-| Site `https://policynest.embarko.app` | 14 Nov app page (unchanged) with the 15 Nov applicant-safe `kb.json`. Passes 1 and 2 and the original list are **not deployed** |
+| Site `https://policynest.embarko.app` | 15 Nov build (passes 1 and 2 and the original list) with the applicant-safe `kb.json`; deployment `cmwhkvdrr00dq13bamf5bwc1q`; live check passed |
 | Proxy `https://policynest-copilot.embarko.app` | Pass 3 build; **AI answers off (no key)** |
-| Engine | 3.4.0. Live: hash `c5da9cfb…`. Local source and evaluation: `c2063887…` (600 of 600 in-sample, same predictions) |
+| Engine | 3.4.0. Live, source and evaluation: `c2063887…` (600 of 600 in-sample, same predictions as `c5da9cfb…`) |
 
 ## 5. Where to pick up
 

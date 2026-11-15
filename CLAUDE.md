@@ -36,7 +36,7 @@ The numbered folders `01_…` to `08_…` in this directory are the source packa
   - **Held-out set:** labelled by the user independently and frozen before the engine sees it.
   - **Usability results:** recorded with participant codes only, in `planning/usability/results.csv`.
   - **Build order:** accessibility fixes → queue data → Node and held-out set → process map → specimen prints and photo bench → deck last.
-  - **Go-ahead:** on 15 Nov, passes 1–2 and the original list were built locally (accessibility and trust, honest numbers, queue data, the §4.6 selfie rule, discovery questions). Nothing from them is deployed yet. Still open: the deploy with the user's OK and a live check, held-out labels, specimen prints, the optional phone-photo bench, the deck, and the console redesign (waits for references).
+  - **Go-ahead:** on 15 Nov, passes 1–2 and the original list were built and deployed after the user's OK (accessibility and trust, honest numbers, queue data, the §4.6 selfie rule, discovery questions). Live check passed: engine hash match, T1–T10. Still open: the deploy with the user's OK and a live check, held-out labels, specimen prints, the optional phone-photo bench, the deck, and the console redesign (waits for references).
 
 **Product spec:** `PRODUCT.md` lists every functional goal with its status (Built / Partial / Not built / Future), the T1–T10 results and the success metrics. Update it when a goal's status changes.
 
@@ -107,7 +107,7 @@ curl -sS -X POST 'https://ship.embarko.ai/apps' -H 'X-App-Name: policynest' -H '
 
 ## Status against the brief (as of 15 Nov 2026)
 
-**15 Nov (built locally, not deployed):** passes 1–2 and the original list: accessibility, the softer focus mode, the empty form and Demo controls, honest numbers, queue data, the §4.6 two-selfie rule, the held-out procedure and the discovery questions. The master audit's 1 blocker and 3 major findings are fixed in `82aacd4`; F-10 and F-11 are open. Details: `BUILD_LOG.md` section 3b.
+**15 Nov (built and live (15 Nov)):** passes 1–2 and the original list: accessibility, the softer focus mode, the empty form and Demo controls, honest numbers, queue data, the §4.6 two-selfie rule, the held-out procedure and the discovery questions. The master audit's 1 blocker and 3 major findings are fixed in `82aacd4`; F-10 and F-11 are open. Details: `BUILD_LOG.md` section 3b.
 
 **Works:** reviewer routing for Human-only cases and disputes (step 3, 14 Nov); clean applicant journey end to end to CERTIFIED; cross-checks on OCR-read values (step 1, 13 Nov); one consolidated follow-up message in English/Hindi with partial re-check and rounds in the audit trail (step 2, 13 Nov); plain-language REJECT; on-device OCR with per-slot type checks; rule citations; privacy masking; public URL. Tested in headless Chrome with Tesseract served from npm (the CDN is blocked in Claude's workspace).
 
@@ -128,7 +128,7 @@ Open the page with `?demo=1` (`.claude/launch.json` "site" serves `policynest_mv
 - **Tiles:** the document tiles are `[data-dk="i"]` buttons, and only the open document's card is in the DOM.
 - **Leaving the screen:** simulate it by overriding `document.hidden` and dispatching `visibilitychange`.
 - **Timer:** test it by overriding `Date.now`.
-- **Engine check:** the engine block's SHA-256 must match the live site's, or the evaluation must be re-run. The live site still runs `c5da9cfb…`. The current hash is `c2063887…` (`tools/check_pack.py` PINNED). Redeploy before any live T1–T10 check.
+- **Engine check:** the engine block's SHA-256 must match the live site's, or the evaluation must be re-run. Since the 15 Nov deploy the live site runs `c2063887…`, the same as the source and the evaluation. The current hash is `c2063887…` (`tools/check_pack.py` PINNED). Redeploy before any live T1–T10 check.
 
 ## Working preferences observed
 

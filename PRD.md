@@ -1,6 +1,6 @@
 # PolicyNest onboarding: product requirements and build roadmap
 
-- **Status (updated 15 Nov 2026):** scope and plan confirmed by the user (section below). **Step 0 and pass 3 are built and live. Passes 1 and 2 and the original list are built locally, audited and fixed, not deployed.** Deploying waits for the user's OK and a live check. Progress, evidence and the hand-over are in `BUILD_LOG.md`.
+- **Status (updated 15 Nov 2026):** scope and plan confirmed by the user (section below). **Step 0 and pass 3 are built and live. Passes 1 and 2 and the original list are built, audited, fixed and live** (deployed 15 Nov after the user's OK; live engine hash `c2063887…` matches the evaluation; T1–T10 passed on the live site). Progress, evidence and the hand-over are in `BUILD_LOG.md`.
 - **Origin:** written 14 Nov 2026 by following Matt Pocock's `to-spec` skill. This folder had no issue tracker (it is a git repository since 15 Nov, with no remote), so the spec lives here, is not published, and has no `ready-for-agent` label.
 - **Built on:** `RECONCILED_FINDINGS.md` (80 findings `RF-nn`, 18 contradictions `CX-nn`) and `GRILL_LOG.md` (46 decisions `G-nn`, every one marked "AI-answered — needs human confirmation"), plus `GLOSSARY.md` and `docs/adr/0001`–`0009`. The terms used below are the glossary's.
 - **Source references:** "Brief" = `01_ORIGINAL_CHALLENGE/PS-01_CHALLENGE_BRIEF.md`; "RB §" = rulebook v3.2 section; "SM" = the state machine spec; "PRODUCT" = the goal IDs in `PRODUCT.md`; "Q-n" = the user's Phase 3 decisions (`planning/PHASE2_SPEC_AND_AUDIT.md` Part D).
@@ -27,20 +27,20 @@ A grill-me round with the user on 15 Nov (11 questions, all answered "yes") **na
 
 Also decided by the user on 14 Nov (CLAUDE.md), and **built and live** in the proxy: 20 questions per 10 minutes per client, a global cap of 30 per minute, **50 AI answers per UTC day** (not the 200 proposed in G-25), client address = second entry from the right of `X-Forwarded-For`, and no `null` origin. FR-50 is built; its contract tests pass (pass 3) and the live proxy refuses `Origin: null`.
 
-### Progress (updated 15 Nov 2026; passes 1–2 and the original list built locally, not deployed)
+### Progress (updated 15 Nov 2026; passes 1–2 and the original list built and live)
 
 | Step | State | Evidence | Commit |
 |---|---|---|---|
 | 0 | **Done.** Git repository; Node 26.13.1; evaluation re-run on today's engine; results carry `engine_sha256` | Re-run identical to 13 Nov (all figures and all 600 predictions); hash `c5da9cfb54f8e716…` matches source, build and live | `f3e5dba`, `e3ed958` |
 | Pass 3 | **Done and live.** Server-side retrieval, client passages ignored, context schema, ID-number refusal, output filter, Haiku without the fallback beta; applicant-safe corpus (13 of 55 passages had fraud-desk wording removed; 0 left) | 14 contract tests pass; live proxy healthy, refuses `null`, reports `no_key`; live `kb.json` identical to local | `4c87e19` |
 | Key | **Waiting for the user.** AI answers stay off until `ANTHROPIC_API_KEY` is added to `policynest-copilot` | — | — |
-| Pass 1 | **Built locally, audited, not deployed.** Accessibility and trust (H1 to H4), softer focus mode, empty form and Demo controls, FR-27 wording. Sonnet audit fixes included | Browser check after `82aacd4`: T1 to T10 reach the brief's outcome; the T4 applicant screen and saved copy hold no other name; the "all six" pop-up fires. Not on the live site | `49e9b93`, `dc91864`, `5916c98`, `ff8bad9`, `75b9f3b`, `4aad625`, `1166166`, `75231da` |
-| Pass 2 | **Built locally, audited, not deployed.** Honest numbers (H5): engine hash on the Evaluation page and in the audit, match state, build warning, in-sample labels, routed-to-a-person counts, 60.7% row, process map | Master audit range checked; evaluation numbers traced to `eval/out/` | `05a3b6e`, `53f2eb2` |
-| Original list | **Built locally, audited, not deployed.** Queue and KPI data, held-out procedure and templates (N1); §4.6 two-selfie rule (H6); discovery questions and doc fixes (N2). Held-out labels not made; queue screens wait for references | Sonnet audit fixes in place; FR-60 runner not executed | `06e9630`, `f666f6b`, `96722e8`, `b581609`, `c6040ed`, `9b382a8` |
+| Pass 1 | **Built, audited and live (deployed 15 Nov, Embarko deployment cmwhkvdrr00dq13bamf5bwc1q; live engine hash c2063887 matches the evaluation; T1–T10 passed on the live site).** Accessibility and trust (H1 to H4), softer focus mode, empty form and Demo controls, FR-27 wording. Sonnet audit fixes included | Browser check after `82aacd4`: T1 to T10 reach the brief's outcome; the T4 applicant screen and saved copy hold no other name; the "all six" pop-up fires. Not on the live site | `49e9b93`, `dc91864`, `5916c98`, `ff8bad9`, `75b9f3b`, `4aad625`, `1166166`, `75231da` |
+| Pass 2 | **Built, audited and live (deployed 15 Nov, Embarko deployment cmwhkvdrr00dq13bamf5bwc1q; live engine hash c2063887 matches the evaluation; T1–T10 passed on the live site).** Honest numbers (H5): engine hash on the Evaluation page and in the audit, match state, build warning, in-sample labels, routed-to-a-person counts, 60.7% row, process map | Master audit range checked; evaluation numbers traced to `eval/out/` | `05a3b6e`, `53f2eb2` |
+| Original list | **Built, audited and live (deployed 15 Nov, Embarko deployment cmwhkvdrr00dq13bamf5bwc1q; live engine hash c2063887 matches the evaluation; T1–T10 passed on the live site).** Queue and KPI data, held-out procedure and templates (N1); §4.6 two-selfie rule (H6); discovery questions and doc fixes (N2). Held-out labels not made; queue screens wait for references | Sonnet audit fixes in place; FR-60 runner not executed | `06e9630`, `f666f6b`, `96722e8`, `b581609`, `c6040ed`, `9b382a8` |
 | Audit corrections | Master audit (Opus): 1 blocker, 3 major, 10 minor. F-01 to F-09 and F-12 fixed; F-10 and F-11 open | `planning/MASTER_AUDIT.md` | `82aacd4` |
 | Step 0 and pass 3 docs | Done (CLAUDE.md updated for pass 3). Docs pass of 15 Nov: PRODUCT.md, CLAUDE.md, BUILD_LOG.md, this file, `planning/DISCOVERY_QUESTIONS.md` | — | — |
 
-Requirements now **built and verified**: FR-46 (server side), FR-47, FR-48, FR-49 (server side), FR-50, FR-51, FR-57 (runner side), FR-58, FR-65, FR-66, FR-67. **Built locally, not deployed** (passes 1 and 2 and the original list): FR-01 to FR-03, FR-05 to FR-07, FR-16, FR-23, FR-27 and FR-38 (AI-proposed, not yet confirmed), FR-31, FR-36, FR-37, FR-41 to FR-45, FR-55 to FR-59, FR-61 to FR-63, FR-69. FR-60 is the runner only (not executed). FR-68 is in progress. Not verified live: an AI answer through the new lookup (no key yet); passes 1 and 2 and the original list, which are not on the live site; and T1–T10 clicked through on the live site (the app page itself is unchanged on the live site, and its engine hash matches).
+Requirements now **built and verified**: FR-46 (server side), FR-47, FR-48, FR-49 (server side), FR-50, FR-51, FR-57 (runner side), FR-58, FR-65, FR-66, FR-67. **Built locally** (passes 1 and 2 and the original list): FR-01 to FR-03, FR-05 to FR-07, FR-16, FR-23, FR-27 and FR-38 (AI-proposed, not yet confirmed), FR-31, FR-36, FR-37, FR-41 to FR-45, FR-55 to FR-59, FR-61 to FR-63, FR-69. FR-60 is the runner only (not executed). FR-68 is in progress. Not verified live: an AI answer through the new lookup (no key yet); passes 1 and 2 and the original list, which are not on the live site; and T1–T10 clicked through on the live site (the app page itself is unchanged on the live site, and its engine hash matches).
 
 ### The confirmed plan
 
@@ -62,7 +62,7 @@ Requirements now **built and verified**: FR-46 (server side), FR-47, FR-48, FR-4
 
 - [x] Step 0 done (15 Nov)
 - [x] Pass 3 deployed and checked live (15 Nov)
-- [ ] Passes 1 and 2 deployed and checked live
+- [x] Passes 1 and 2 deployed and checked live (15 Nov: hash match, T1–T10 passed live)
 - [ ] AI key added; one supervised round of answers checked against the guardrails
 - [ ] Usability tests: 5 applicants, 2 reviewers; results in `planning/usability/results.csv` with codes only (FR-71)
 - [ ] A team member adopts or overrules each of the 20 hand-decided cases (FR-73)
