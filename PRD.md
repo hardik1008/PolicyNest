@@ -40,7 +40,7 @@ Also decided by the user on 14 Nov (CLAUDE.md), and **built and live** in the pr
 | Audit corrections | Master audit (Opus): 1 blocker, 3 major, 10 minor. F-01 to F-09 and F-12 fixed; F-10 and F-11 open | `planning/MASTER_AUDIT.md` | `82aacd4` |
 | Step 0 and pass 3 docs | Done (CLAUDE.md updated for pass 3). Docs pass of 15 Nov: PRODUCT.md, CLAUDE.md, BUILD_LOG.md, this file, `planning/DISCOVERY_QUESTIONS.md` | — | — |
 
-Requirements now **built and verified**: FR-46 (server side), FR-47, FR-48, FR-49 (server side), FR-50, FR-51, FR-57 (runner side), FR-58, FR-65, FR-66, FR-67. **Built locally** (passes 1 and 2 and the original list): FR-01 to FR-03, FR-05 to FR-07, FR-16, FR-23, FR-27 and FR-38 (AI-proposed, not yet confirmed), FR-31, FR-36, FR-37, FR-41 to FR-45, FR-55 to FR-59, FR-61 to FR-63, FR-69. FR-60 is the runner only (not executed). FR-68 is in progress. Not verified live: an AI answer through the new lookup (no key yet); passes 1 and 2 and the original list, which are not on the live site; and T1–T10 clicked through on the live site (the app page itself is unchanged on the live site, and its engine hash matches).
+Requirements now **built and verified**: FR-46 (server side), FR-47, FR-48, FR-49 (server side), FR-50, FR-51, FR-57 (runner side), FR-58, FR-65, FR-66, FR-67. **Built and live, checked 15 Nov** (passes 1 and 2 and the original list): FR-01 to FR-03, FR-05 to FR-07, FR-16, FR-23, FR-27 and FR-38 (AI-proposed, not yet confirmed), FR-31, FR-36, FR-37, FR-41 to FR-45, FR-55 to FR-59, FR-61 to FR-63, FR-69. FR-60 is the runner only (not executed). FR-68 is in progress. Not verified live: an AI answer through the new lookup (no key yet); passes 1 and 2 and the original list, which are not on the live site; and T1–T10 clicked through on the live site (the app page itself is unchanged on the live site, and its engine hash matches).
 
 ### The confirmed plan
 
@@ -527,7 +527,7 @@ Module language follows `codebase-design` (deep modules behind small interfaces)
 | Straight-through and correct | ≥ 60% | 98.2% (589 of 600) | In-sample; brief's definition (no human touch) | same |
 | Approved first time, no follow-up | none | 60.7% (364 of 600) | In-sample | PRODUCT §6 |
 | Follow-up rounds per returned application | 1 | 1.0 (6 of 176 would need a second because a blurry document hides a problem) | In-sample | EV |
-| Time to decision (straight-through) | < 10 min | Under 1 s on this demo, measured from the later of the last accepted document and Submit to the decision (FR-23, built locally 15 Nov); engine about 0.04 ms per application on pre-read text | Observed and measured; the on-screen figure was fixed 15 Nov (RF-33, FR-23) | EV, RF-33 |
+| Time to decision (straight-through) | < 10 min | Under 1 s on this demo, measured from the later of the last accepted document and Submit to the decision (FR-23, live 15 Nov); engine about 0.04 ms per application on pre-read text | Observed and measured; the on-screen figure was fixed 15 Nov (RF-33, FR-23) | EV, RF-33 |
 | Reviewer minutes per application | < 5 | 0.38 | **Simulated estimate** | EV |
 | Applicant clarity | ≥ 4 / 5 | Not measured | Needs five users (FR-71) | UT |
 | Median days to certificate | baseline 8.4 | 7.4; 6.1 with the training link at approval | **Simulation, directional** | EV, S1P |
